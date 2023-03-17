@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="286.0" prefWidth="263.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <JFXRadioButton fx:id="utf8RadioButton" layoutX="88.0" layoutY="45.0" text="UTF-8" textAlignment="CENTER">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </JFXRadioButton>
+   <JFXRadioButton fx:id="gbkRadioButton" layoutX="88.0" layoutY="85.0" text="GBK" textAlignment="CENTER">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </JFXRadioButton>
+   <JFXRadioButton fx:id="isoRadioButton" layoutX="88.0" layoutY="125.0" text="ISO-8859-1" textAlignment="CENTER">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </JFXRadioButton>
+   <JFXRadioButton fx:id="usasciiRadioButton" layoutX="88.0" layoutY="165.0" text="US-ASCII">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </JFXRadioButton>
+   <JFXButton fx:id="saveCharsetButton" layoutX="68.0" layoutY="219.0" prefHeight="36.0" prefWidth="129.0" text="保存编码方式" />
+</AnchorPane>

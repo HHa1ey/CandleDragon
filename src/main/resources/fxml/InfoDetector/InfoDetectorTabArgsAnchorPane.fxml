@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="InfoDetectorArgsResultAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="535.0" prefWidth="1130.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <Text layoutX="11.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="参数：">
+      <font>
+         <Font size="16.0" />
+      </font>
+   </Text>
+   <TextArea fx:id="infoDetectorArgsTextArea" layoutX="1.0" layoutY="49.0" prefHeight="122.0" prefWidth="1128.0" />
+   <Text layoutX="11.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="探测结果：" wrappingWidth="93.240234375">
+      <font>
+         <Font size="16.0" />
+      </font>
+   </Text>
+   <TextArea fx:id="infoDetectorResultTextArea" layoutX="1.0" layoutY="262.0" prefHeight="273.0" prefWidth="1128.0" />
+</AnchorPane>

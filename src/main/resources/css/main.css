@@ -1,0 +1,22 @@
+.jfx-button {
+    -jfx-button-type: RAISED;
+    -fx-font-size: 15;
+    -fx-background-color:#ffffff;
+    -fx-text-fill:#003366;
+    -fx-border-insets:-5;
+}
+
+
+.jfx-button:hover{
+    -fx-background-color: #B4CDCD;
+}
+
+
+
+.text-area {
+    -fx-font-size: 15;
+}
+
+.jfx-tab-pane .headers-region .tab .tab-container .tab-close-button > .jfx-svg-glyph {
+    -fx-background-color: red;
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="650.0" prefWidth="1130.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <TextField fx:id="infoDetectorTargetAddressTextField" layoutX="117.0" layoutY="33.0" prefHeight="30.0" prefWidth="735.0" />
+   <Text layoutX="51.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="地址：">
+      <font>
+         <Font size="16.0" />
+      </font>
+   </Text>
+   <JFXButton fx:id="infoDetectorStartButton" layoutX="874.0" layoutY="33.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" text="探测" />
+   <TabPane fx:id="infoDetectorResultTabPane" layoutY="86.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="560.0" prefWidth="1130.0" tabClosingPolicy="UNAVAILABLE" />
+</AnchorPane>

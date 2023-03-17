@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="378.0" prefWidth="282.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <JFXRadioButton fx:id="proxy_enable" layoutX="67.0" layoutY="27.0" text="启用">
+        <font>
+            <Font size="16.0" />
+        </font>
+    </JFXRadioButton>
+    <JFXRadioButton fx:id="proxy_disable" layoutX="159.0" layoutY="27.0" text="关闭">
+        <font>
+            <Font size="16.0" />
+        </font>
+    </JFXRadioButton>
+    <Text layoutX="14.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="代理类型：">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <Text layoutX="28.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP地址：">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <Text layoutX="43.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="端口：">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <Text layoutX="27.0" layoutY="239.0" strokeType="OUTSIDE" strokeWidth="0.0" text="用户名：">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <Text layoutX="43.0" layoutY="289.0" strokeType="OUTSIDE" strokeWidth="0.0" text="密码：">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <JFXComboBox fx:id="choose_proxy" layoutX="91.0" layoutY="75.0" prefHeight="30.0" prefWidth="168.0" />
+    <TextField fx:id="autoproxy_ip" layoutX="91.0" layoutY="125.0" prefHeight="30.0" prefWidth="168.0" text="127.0.0.1" />
+    <TextField fx:id="autoproxy_port" layoutX="91.0" layoutY="170.0" prefHeight="30.0" prefWidth="168.0" text="8080" />
+    <TextField fx:id="autoproxy_user" layoutX="91.0" layoutY="219.0" prefHeight="30.0" prefWidth="168.0" />
+    <TextField fx:id="autoproxy_pass" layoutX="91.0" layoutY="268.0" prefHeight="30.0" prefWidth="168.0" />
+    <JFXButton fx:id="save_button" layoutX="23.0" layoutY="318.0" prefHeight="39.0" prefWidth="88.0" text="保存" />
+    <JFXButton fx:id="cancel_button" layoutX="159.0" layoutY="318.0" prefHeight="39.0" prefWidth="88.0" text="取消" />
+</AnchorPane>

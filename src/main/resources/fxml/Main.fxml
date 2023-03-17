@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1130.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ha1ey.CandleDragon.ui.MainController">
+   <MenuBar VBox.vgrow="ALWAYS">
+      <Menu mnemonicParsing="false" text="设置">
+         <MenuItem mnemonicParsing="false" onAction="#proxy" text="设置代理" />
+         <MenuItem mnemonicParsing="false" onAction="#setCharset" text="设置编码方式" />
+      </Menu>
+      <Menu mnemonicParsing="false" text="关于">
+         <MenuItem mnemonicParsing="false" onAction="#getAbout" text="Github" />
+      </Menu>
+   </MenuBar>
+   <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+      <Tab text="插件">
+         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="725.0" prefWidth="1130.0">
+            <TabPane prefHeight="700.0" prefWidth="1130.0" tabClosingPolicy="UNAVAILABLE">
+               <Tab text="信息探测插件">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="648.0" prefWidth="1130.0">
+                     <TextField fx:id="infoPluginKeywordSearchTextField" layoutX="180.0" layoutY="14.0" prefHeight="30.0" prefWidth="735.0" />
+                     <Text layoutX="105.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="关键字：">
+                        <font>
+                           <Font size="16.0" />
+                        </font>
+                     </Text>
+                     <TableView fx:id="infoDetectorTableView" layoutY="60.0" prefHeight="605.0" prefWidth="1130.0">
+                        <columns>
+                           <TableColumn fx:id="infoPlugin_ID" prefWidth="75.0" text="ID" />
+                           <TableColumn fx:id="infoPlugin_PluginName" prefWidth="280.0" text="插件名" />
+                           <TableColumn fx:id="infoPlugin_Author" minWidth="0.0" prefWidth="148.0" text="作者名" />
+                           <TableColumn fx:id="infoPlugin_Version" prefWidth="76.5" text="插件版本" />
+                           <TableColumn fx:id="infoPlugin_Descrition" prefWidth="438.5" text="描述" />
+                        </columns>
+                     </TableView>
+                  </AnchorPane>
+               </Tab>
+               <Tab text="漏洞插件">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="656.0" prefWidth="1130.0">
+                     <TextField fx:id="vulPluginKeywordSearchTextField" layoutX="180.0" layoutY="14.0" prefHeight="30.0" prefWidth="735.0" />
+                     <Text layoutX="105.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="关键字：">
+                        <font>
+                           <Font size="16.0" />
+                        </font>
+                     </Text>
+                     <TableView fx:id="vulTableView" layoutY="60.0" prefHeight="605.0" prefWidth="1130.0">
+                        <columns>
+                           <TableColumn fx:id="vulPlugin_ID" prefWidth="45.0" text="ID" />
+                           <TableColumn fx:id="vulPlugin_Name" prefWidth="171.0" text="插件名" />
+                           <TableColumn fx:id="vulplugin_VulName" prefWidth="184.5" text="漏洞名称" />
+                           <TableColumn fx:id="vulPlugin_AuthorName" minWidth="0.0" prefWidth="102.5" text="作者名" />
+                           <TableColumn fx:id="vulPlugin_Version" prefWidth="107.0" text="插件版本" />
+                           <TableColumn fx:id="vulPlugin_VersionScope" prefWidth="130.5" text="漏洞适用范围" />
+                           <TableColumn fx:id="vulPlugin_DisclosureTime" prefWidth="155.0" text="漏洞发现时间" />
+                           <TableColumn fx:id="vulPlugin_Description" prefWidth="233.0" text="漏洞描述" />
+                        </columns>
+                     </TableView>
+                  </AnchorPane>
+               </Tab>
+            </TabPane>
+         </AnchorPane>
+      </Tab>
+      <Tab text="信息探测">
+         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="725.0" prefWidth="1130.0">
+            <TabPane fx:id="infoDetectorTabPane" prefHeight="725.0" prefWidth="1130.0" />
+         </AnchorPane>
+      </Tab>
+      <Tab text="漏洞测试">
+         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="725.0" prefWidth="1130.0">
+            <TabPane fx:id="vulPocTabPane" prefHeight="725.0" prefWidth="1130.0" />
+         </AnchorPane>
+      </Tab>
+      <Tab text="漏洞利用">
+         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="725.0" prefWidth="1130.0">
+            <TabPane fx:id="vulExpTabPane" prefHeight="725.0" prefWidth="1130.0" />
+         </AnchorPane>
+      </Tab>
+   </TabPane>
+   <GridPane alignment="BOTTOM_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="1044.0" VBox.vgrow="ALWAYS">
+      <columnConstraints>
+         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+      <Label fx:id="proxyStatus" prefHeight="20.0" prefWidth="625.0" text="代理模式：关闭" VBox.vgrow="ALWAYS">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" prefHeight="24.0" prefWidth="461.0" text="本软件仅供内部人员测试使用，严禁进行非法用途。" textFill="RED" GridPane.columnIndex="1">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+   </GridPane>
+</VBox>
