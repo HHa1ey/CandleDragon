@@ -28,7 +28,7 @@ public class ScanResultPOJO implements ScanResult {
 
     @Override
     public void setVul(boolean isVul) {
-        this.isVul = false;
+        this.isVul = isVul;
     }
 
     @Override

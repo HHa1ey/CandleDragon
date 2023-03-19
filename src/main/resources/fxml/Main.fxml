@@ -62,7 +62,7 @@
                         <columns>
                            <TableColumn fx:id="vulPlugin_ID" prefWidth="45.0" text="ID" />
                            <TableColumn fx:id="vulPlugin_Name" prefWidth="171.0" text="插件名" />
-                           <TableColumn fx:id="vulplugin_VulName" prefWidth="184.5" text="漏洞名称" />
+                           <TableColumn fx:id="vulPlugin_VulName" prefWidth="184.5" text="漏洞名称" />
                            <TableColumn fx:id="vulPlugin_AuthorName" minWidth="0.0" prefWidth="102.5" text="作者名" />
                            <TableColumn fx:id="vulPlugin_Version" prefWidth="107.0" text="插件版本" />
                            <TableColumn fx:id="vulPlugin_VersionScope" prefWidth="130.5" text="漏洞适用范围" />

@@ -68,7 +68,7 @@ public class MainController {
     @FXML
     public TableColumn<VulPOJO, String> vulPlugin_Name;
     @FXML
-    public TableColumn<VulPOJO, String> vulplugin_VulName;
+    public TableColumn<VulPOJO, String> vulPlugin_VulName;
     @FXML
     public TableColumn<VulPOJO, String> vulPlugin_AuthorName;
     @FXML
@@ -230,15 +230,12 @@ public class MainController {
                                 );
                             } catch (Throwable ignored) {
                             }
-
-
                         });
                     }
                 } catch (Throwable ignored) {
                 }
             }
         });
-
     }
 
 
@@ -260,6 +257,9 @@ public class MainController {
         vulPlugin_AuthorName.setCellValueFactory(new PropertyValueFactory<>("VulPluginAuthor"));
         vulPlugin_Version.setCellValueFactory(new PropertyValueFactory<>("VulPluginVersion"));
         vulPlugin_Description.setCellValueFactory(new PropertyValueFactory<>("VulDescription"));
+        vulPlugin_VulName.setCellValueFactory(new PropertyValueFactory<>("VulName"));
+        vulPlugin_VersionScope.setCellValueFactory(new PropertyValueFactory<>("VulScope"));
+        vulPlugin_DisclosureTime.setCellValueFactory(new PropertyValueFactory<>("VulDisclosureTime"));
         vulTableView.getItems().addAll(PluginPOJOList.vulPOJOList);
 
 
@@ -425,7 +425,6 @@ public class MainController {
             String dateFormat = "yyyy-MM-dd HH:mm:ss";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
             String time = simpleDateFormat.format(new Date());
-            pocResultTableView.getItems().clear();
             pocResultTextArea.setText("");
             String[] strings = pocTargetAddressTextArea.getText().split("\n");
             for (String targetAddress : strings) {

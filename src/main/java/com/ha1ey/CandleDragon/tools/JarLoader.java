@@ -21,6 +21,9 @@ public class JarLoader extends ClassLoader {
     public void mainLoader() {
         try {
             File directory = new File(PLUGIN_PATH);
+            if (!directory.exists()&&!directory.isDirectory()){
+                directory.mkdir();
+            }
             File[] jars = directory.listFiles();
             if (jars != null) {
                 for (File file : jars) {

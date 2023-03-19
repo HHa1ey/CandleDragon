@@ -6,7 +6,7 @@
 
     <groupId>com.ha1ey</groupId>
     <artifactId>CandleDragon</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -23,6 +23,7 @@
             <artifactId>jfoenix</artifactId>
             <version>8.0.10</version>
         </dependency>
+
         <dependency>
             <groupId>de.jensd</groupId>
             <artifactId>fontawesomefx</artifactId>
@@ -32,6 +33,7 @@
     <build>
         <pluginManagement>
             <plugins>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
