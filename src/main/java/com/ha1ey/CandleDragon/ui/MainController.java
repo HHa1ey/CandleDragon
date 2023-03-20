@@ -7,6 +7,7 @@ import com.ha1ey.CandleDragon.plugin.ArgsInfo;
 import com.ha1ey.CandleDragon.plugin.Exploit;
 import com.ha1ey.CandleDragon.plugin.InfoDetector;
 import com.ha1ey.CandleDragon.tools.JarLoader;
+import com.ha1ey.CandleDragon.tools.Tools;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
@@ -213,7 +214,7 @@ public class MainController {
                                 }
                             }
                             try {
-                                targetPOJO.setAddress(infoDetectorTargetAddressTextField.getText());
+                                targetPOJO.setAddress(Tools.urlParse(infoDetectorTargetAddressTextField.getText()));
                                 LinkedHashMap<String, String> infos = infoDetect.doDetect(targetPOJO, args, resultOutputPOJO);
                                 infoResultTextArea.appendText(
                                         "[>]开始探测>>>>>>>>" + infoDetect.getInfoDetectorTabTitle() + "\n\n" +
@@ -396,7 +397,7 @@ public class MainController {
                                 }
                             }
                             try {
-                                targetPOJO.setAddress(vulExpTargetAddressTextField.getText());
+                                targetPOJO.setAddress(Tools.urlParse(vulExpTargetAddressTextField.getText()));
                                 exploit.doExploit(targetPOJO, args, resultOutputPOJO);
                                 resultTextArea.appendText(
                                         exploit.getExploitTabTitle() + "\t[>]开始>>>>>>>>\n\n" +
@@ -431,7 +432,7 @@ public class MainController {
                 try {
                     TargetPOJO targetPOJO = new TargetPOJO();
                     ResultOutputPOJO resultOutputPOJO = new ResultOutputPOJO();
-                    targetPOJO.setAddress(targetAddress);
+                    targetPOJO.setAddress(Tools.urlParse(targetAddress));
                     scanResultPOJO = (ScanResultPOJO) PluginPOJOList.vulPOJOList.get(vulIndex).getPoc().doCheck(targetPOJO, resultOutputPOJO);
                     scanResultPOJO.setTime(time);
                     pocResultTableView.getItems().addAll(scanResultPOJO);
