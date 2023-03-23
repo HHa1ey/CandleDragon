@@ -15,8 +15,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/Main.fxml")));
         primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getClassLoader().getResource("icon/icon.png")).toString()));
-        primaryStage.setTitle("CandleDragon 烛龙  【插件化漏洞利用工具V1.1】      Author：Ha1ey");
+        primaryStage.setTitle("CandleDragon 烛龙  【插件化漏洞利用工具V1.3】      Author：Ha1ey");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setResizable(false);
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> System.exit(0));
     }

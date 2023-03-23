@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTextArea?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1130.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" stylesheets="/css/main.css">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1130.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <JFXButton fx:id="pocScanButton" layoutX="-1.0" layoutY="-2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="1132.0" text="扫描" />
-   <SplitPane fx:id="pocTargetSplitPane" dividerPositions="0.2845744680851064" layoutY="31.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="1130.0">
-      <JFXTextArea />
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+   <SplitPane fx:id="pocTargetSplitPane" layoutY="31.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="1130.0">
+      <SplitPane layoutX="1.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
          <TableView prefHeight="200.0" prefWidth="200.0">
             <columns>
                <TableColumn prefWidth="265.5" text="目标" />
@@ -17,7 +18,6 @@
                <TableColumn prefWidth="208.5" text="检测时间" />
             </columns>
          </TableView>
-         <JFXTextArea fx:id="pocScanResultTextArea" />
       </SplitPane>
    </SplitPane>
 </AnchorPane>

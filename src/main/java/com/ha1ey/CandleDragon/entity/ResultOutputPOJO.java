@@ -5,15 +5,13 @@ import com.ha1ey.CandleDragon.plugin.ResultOutput;
 import java.util.ArrayList;
 
 public class ResultOutputPOJO implements ResultOutput {
-    private ArrayList<String> rawList = new ArrayList<>();
-    private ArrayList<String> debugList = new ArrayList<>();
-    private ArrayList<String> infoList = new ArrayList<>();
-    private ArrayList<String> successList = new ArrayList<>();
-    private ArrayList<String> failList = new ArrayList<>();
-    private ArrayList<String> warningList = new ArrayList<>();
-    private ArrayList<String> errorList = new ArrayList<>();
-    private ArrayList<String> startList = new ArrayList<>();
-    private ArrayList<String> stopList = new ArrayList<>();
+    private final ArrayList<String> rawList = new ArrayList<>();
+    private final ArrayList<String> debugList = new ArrayList<>();
+    private final ArrayList<String> infoList = new ArrayList<>();
+    private final ArrayList<String> successList = new ArrayList<>();
+    private final ArrayList<String> failList = new ArrayList<>();
+    private final ArrayList<String> warningList = new ArrayList<>();
+    private final ArrayList<String> errorList = new ArrayList<>();
 
 
     public ArrayList<String> getRawList() {
@@ -44,13 +42,6 @@ public class ResultOutputPOJO implements ResultOutput {
         return errorList;
     }
 
-    public ArrayList<String> getStartList() {
-        return startList;
-    }
-
-    public ArrayList<String> getStopList() {
-        return stopList;
-    }
 
     @Override
     public void rawPrint(String rawmsg) {
@@ -59,41 +50,39 @@ public class ResultOutputPOJO implements ResultOutput {
 
     @Override
     public void debugPrint(String debugmsg) {
-        debugList.add(debugmsg);
+        debugList.add("[&]"+debugmsg);
     }
 
     @Override
     public void infoPrint(String infomsg) {
-        infoList.add(infomsg);
+        infoList.add("[*]"+infomsg);
     }
 
     @Override
     public void successPrint(String successmsg) {
-        successList.add(successmsg);
+        successList.add("[+]"+successmsg);
     }
 
     @Override
     public void failPrint(String failmsg) {
-        failList.add(failmsg);
+        failList.add("[-]"+failmsg);
     }
 
     @Override
     public void warningPrint(String warningmsg) {
-        warningList.add(warningmsg);
+        warningList.add("[!]"+warningmsg);
     }
 
     @Override
     public void errorPrint(String errormsg) {
-        errorList.add(errormsg);
+        errorList.add("[x]"+errormsg);
     }
 
     @Override
     public void startPrint(String startmsg) {
-        startList.add(startmsg);
     }
 
     @Override
     public void stopPrint(String stopmsg) {
-        stopList.add(stopmsg);
     }
 }

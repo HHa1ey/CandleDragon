@@ -11,7 +11,6 @@ import com.ha1ey.CandleDragon.tools.Tools;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
-import com.jfoenix.controls.JFXTextArea;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -19,13 +18,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Window;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.model.StyleSpans;
+import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 import java.awt.*;
 import java.io.IOException;
@@ -33,6 +36,8 @@ import java.net.*;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class MainController {
@@ -89,10 +94,6 @@ public class MainController {
 
     //以下是信息探测模块定义的属性
     JFXButton infoDetectorStartButton = new JFXButton();          //信息探测开始按钮
-    TextField infoDetectorTargetAddressTextField = new TextField();         //信息探测地址栏
-    TextArea infoDetectorArgsTextArea = new TextArea();
-    TextArea infoDetectorResultTextArea = new TextArea();
-    TextArea infoDetectorArgsResultTextArea = new TextArea();
 
     int infoDetectorIndex;
 
@@ -101,16 +102,35 @@ public class MainController {
     //POC模块
     JFXButton pocScanButton = new JFXButton();
     int vulIndex;
-    JFXTextArea pocTargetAddressTextArea = new JFXTextArea();
-    JFXTextArea pocResultTextArea = new JFXTextArea();
+
     TableView<ScanResultPOJO> pocResultTableView;
     ScanResultPOJO scanResultPOJO = new ScanResultPOJO();
 
     //EXP模块
     JFXButton vulExpStartButton = new JFXButton();
-    TextField vulExpTargetAddressTextField = new TextField();
-    TextArea vulExpArgsTextArea = new TextArea();
-    TextArea vulExpResultTextArea = new TextArea();
+
+
+
+
+    private static final String START_PATTERN = "\\[>\\]\\S*";
+    private static final String STOP_PATTERN = "\\[=\\]\\S*";
+    private static final String ERROR_PATTERN = "\\[x\\]\\S*";
+    private static final String WARNING_PATTERN = "\\[!\\]\\S*";
+    private static final String FAIL_PATTERN = "\\[-\\]\\S*";
+    private static final String SUCCESS_PATTERN = "\\[+\\]\\S*";
+    private static final String INFO_PATTERN = "\\[*\\]\\S*";
+    private static final Pattern PATTERN = Pattern.compile(
+            "(?<START>" + START_PATTERN + ")"
+                    + "|(?<STOP>" + STOP_PATTERN + ")"
+                    + "|(?<ERROR>" + ERROR_PATTERN + ")"
+                    + "|(?<WARNING>" + WARNING_PATTERN + ")"
+                    + "|(?<FAIL>" + FAIL_PATTERN + ")"
+                    + "|(?<SUCCESS>" + SUCCESS_PATTERN + ")"
+                    + "|(?<INFO>" + INFO_PATTERN + ")"
+    );
+
+
+
 
     @FXML
     public void initialize() {
@@ -150,49 +170,77 @@ public class MainController {
                 try {
                     //跳转探测页面
                     Tab infoDetectorTab = new Tab();
+                    //漏洞URL地址
+                    TextField infoDetectorTargetAddressTextField;
                     infoDetectorTab.setText(infoDetectorTableView.getSelectionModel().getSelectedItems().get(0).getInfoDetectorPluginName());
                     AnchorPane infoDetectorTabAnchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/InfoDetector/InfoDetectorTabAnchorPane.fxml")));
                     infoDetectorTab.setContent(infoDetectorTabAnchorPane);
                     infoDetectorTabPane.getTabs().add(infoDetectorTab);
+                    infoDetectorTabPane.getSelectionModel().selectLast();
                     //信息探测开始按钮
                     infoDetectorStartButton = (JFXButton) infoDetectorTabAnchorPane.lookup("#infoDetectorStartButton");
                     //信息探测插件URL地址按钮
                     infoDetectorTargetAddressTextField = (TextField) infoDetectorTabAnchorPane.lookup("#infoDetectorTargetAddressTextField");
                     TabPane infoDetectorResultTabPane = (TabPane) infoDetectorTabAnchorPane.lookup("#infoDetectorResultTabPane");
-                    List<InfoDetector> infoDetectorList = PluginPOJOList.infoDetectorPOJOList.get(infoDetectorIndex).getInfoDetector();
                     HashMap<String, InfoDetector> infoDetectorHashMap = new HashMap<>();
-
+                    List<InfoDetector> infoDetectorList = PluginPOJOList.infoDetectorPOJOList.get(infoDetectorIndex).getInfoDetector();
                     for (InfoDetector infoDetector : infoDetectorList) {
                         Tab infoDetectorResultTab = new Tab();
                         //设置信息探测插件的TabTitle
                         infoDetectorHashMap.put(infoDetector.getInfoDetectorTabTitle(), infoDetector);
                         infoDetectorResultTab.setText(infoDetector.getInfoDetectorTabTitle());
                         infoDetectorResultTabPane.getTabs().add(infoDetectorResultTab);
+
+                        CodeArea infoDetectorResultCodeArea = new CodeArea();
+                        infoDetectorResultCodeArea.setId("infoDetectorResultCodeArea");
+                        infoDetectorResultCodeArea.setWrapText(true);
+                        infoDetectorResultCodeArea.setEditable(false);
+                        infoDetectorResultCodeArea.textProperty().addListener((obs, oldText, newText) -> {
+                            infoDetectorResultCodeArea.setStyleSpans(0, computeHighlighting(newText));
+                        });
+                        infoDetectorResultCodeArea.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("css/main.css")).toExternalForm());
+
+
+                        CodeArea infoDetectorArgsCodeArea = new CodeArea();
+                        infoDetectorArgsCodeArea.setWrapText(true);
+
                         //取出当前选择表格的参数列表，用于下面设置TextArea的预设Arg值
                         ArgsUsagePOJO infoDetectorArgsUsagePOJO = (ArgsUsagePOJO) infoDetector.getInfoDetectorCustomArgs();
                         AnchorPane infoDetectorTabResultAnchorPane;
                         //根据插件是否设置参数，选择加载信息探测结果页面
                         ArgsInfoPOJO argsInfoPOJO;
+
+
                         if (infoDetectorArgsUsagePOJO == null) {
                             infoDetectorTabResultAnchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/InfoDetector/InfoDetectorTabResultAnchorPane.fxml")));
-                            infoDetectorResultTextArea = (TextArea) infoDetectorTabResultAnchorPane.lookup("#infoDetectorResultTextArea");
+                            infoDetectorResultCodeArea.setPrefSize(1125,473);
+                            infoDetectorResultCodeArea.setLayoutX(3);
+                            infoDetectorResultCodeArea.setLayoutY(60);
+
+                            infoDetectorTabResultAnchorPane.getChildren().add(infoDetectorResultCodeArea);
                             infoDetectorResultTab.setContent(infoDetectorTabResultAnchorPane);
                         } else {
                             infoDetectorTabResultAnchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/InfoDetector/InfoDetectorTabArgsAnchorPane.fxml")));
-                            infoDetectorArgsTextArea = (TextArea) infoDetectorTabResultAnchorPane.lookup("#infoDetectorArgsTextArea");
-                            infoDetectorArgsTextArea.setWrapText(true);
+                            infoDetectorArgsCodeArea.setPrefSize(1128,122);
+                            infoDetectorArgsCodeArea.setLayoutX(1);
+                            infoDetectorArgsCodeArea.setLayoutY(49);
 
-                            infoDetectorResultTextArea = (TextArea) infoDetectorTabResultAnchorPane.lookup("#infoDetectorResultTextArea");
+
+                            infoDetectorResultCodeArea.setPrefSize(1125,284);
+                            infoDetectorResultCodeArea.setLayoutX(1);
+                            infoDetectorResultCodeArea.setLayoutY(251);
+
+                            infoDetectorTabResultAnchorPane.getChildren().add(infoDetectorResultCodeArea);
+                            infoDetectorTabResultAnchorPane.getChildren().add(infoDetectorArgsCodeArea );
                             infoDetectorResultTab.setContent(infoDetectorTabResultAnchorPane);
 
                             for (ArgsInfo argsInfo : infoDetectorArgsUsagePOJO.getArgsInfoList()) {
                                 argsInfoPOJO = (ArgsInfoPOJO) argsInfo;
-                                infoDetectorArgsTextArea.appendText(argsInfoPOJO.getName() + "=\n");
+                                infoDetectorArgsCodeArea.appendText(argsInfoPOJO.getName() + "=\n");
                             }
                         }
 
                         mainTabPane.getSelectionModel().select(1);
-
 
                         infoDetectorStartButton.setOnAction(event -> {
                             //设置每个参数对应的value值
@@ -202,10 +250,9 @@ public class MainController {
                             InfoDetector infoDetect = infoDetectorHashMap.get(infoDetectorResultTabPane.getSelectionModel().getSelectedItem().getText());
                             ArgsUsagePOJO argsUsagePOJO = (ArgsUsagePOJO) infoDetect.getInfoDetectorCustomArgs();
                             AnchorPane anchorPane = (AnchorPane) infoDetectorResultTabPane.getSelectionModel().getSelectedItem().getContent();
-                            TextArea infoResultTextArea = (TextArea) anchorPane.lookup("#infoDetectorResultTextArea");
-                            infoResultTextArea.setWrapText(true);
+                            CodeArea finalInfoDetectorResultCodeArea = (CodeArea) anchorPane.lookup("#infoDetectorResultCodeArea");
                             if (argsUsagePOJO != null) {
-                                String argsText = infoDetectorArgsTextArea.getText();
+                                String argsText = infoDetectorArgsCodeArea.getText();
                                 for (ArgsInfo argsInfo : argsUsagePOJO.getArgsInfoList()) {
                                     ArgsInfoPOJO finalArgsInfoPOJO = (ArgsInfoPOJO) argsInfo;
                                     String[] argsValues = argsText.split(finalArgsInfoPOJO.getName() + "=");
@@ -216,24 +263,37 @@ public class MainController {
                             try {
                                 targetPOJO.setAddress(Tools.urlParse(infoDetectorTargetAddressTextField.getText()));
                                 LinkedHashMap<String, String> infos = infoDetect.doDetect(targetPOJO, args, resultOutputPOJO);
-                                infoResultTextArea.appendText(
-                                        "[>]开始探测>>>>>>>>" + infoDetect.getInfoDetectorTabTitle() + "\n\n" +
-                                                String.join("\n", resultOutputPOJO.getSuccessList()) + "\n" +
-                                                String.join("\n", resultOutputPOJO.getRawList()) + "\n" +
-                                                String.join("\n", resultOutputPOJO.getDebugList()) + "\n" +
-                                                String.join("\n", resultOutputPOJO.getErrorList()) + "\n" +
-                                                String.join("\n", resultOutputPOJO.getFailList()) + "\n" +
-                                                String.join("\n", resultOutputPOJO.getWarningList()) + "\n" +
-                                                "——————————————————————————————\n" +
-                                                targetPOJO.getAddress() + "\t|\t" + infos.get(targetPOJO.getAddress()) + "\n" +
-                                                "——————————————————————————————\n" +
-                                                "<<<<<<<<" + infoDetect.getInfoDetectorTabTitle() + "  |  探测结束>>>>>>>>\n\n"
-                                );
-                            } catch (Throwable ignored) {
+                                finalInfoDetectorResultCodeArea.appendText("[>]"+infoDetect.getInfoDetectorTabTitle() +"开始探测........\n\n");
+                                if(resultOutputPOJO.getSuccessList().size()!=0){
+                                    finalInfoDetectorResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getSuccessList()) + "\n");
+                                }
+                                if (resultOutputPOJO.getRawList().size()!=0){
+                                    finalInfoDetectorResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getRawList()) + "\n");
+                                }
+                                if (resultOutputPOJO.getDebugList().size()!=0){
+                                    finalInfoDetectorResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getDebugList()) + "\n");
+                                }
+                                if (resultOutputPOJO.getErrorList().size()!=0){
+                                    finalInfoDetectorResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getErrorList()) + "\n");
+                                }
+                                if (resultOutputPOJO.getFailList().size()!=0){
+                                    finalInfoDetectorResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getFailList()) + "\n");
+                                }
+                                if (resultOutputPOJO.getWarningList().size()!=0){
+                                    finalInfoDetectorResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getWarningList()) + "\n");
+                                }
+                                finalInfoDetectorResultCodeArea.appendText(
+                                        "\n*************************************************\n" +
+                                        targetPOJO.getAddress() + "\t|\t" + infos.get(targetPOJO.getAddress()) + "\n" +
+                                        "*************************************************\n" +
+                                        "[=]" + infoDetect.getInfoDetectorTabTitle() + "探测结束!!!!!!!!\n\n\n");
+                            } catch (Throwable e) {
+                                e.printStackTrace();
                             }
                         });
                     }
-                } catch (Throwable ignored) {
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -268,32 +328,46 @@ public class MainController {
         vulTableView.setOnMouseClicked(event2 -> {
             vulIndex = vulTableView.getSelectionModel().getSelectedIndex();
             if (event2.getButton() == MouseButton.SECONDARY) {
+                ContextMenu contextMenu = new ContextMenu();
+                MenuItem sendToPOC = new MenuItem("发送到POC");
+                MenuItem sendToEXP = new MenuItem("发送到EXP");
+                contextMenu.getItems().addAll(sendToPOC,sendToEXP);
                 Node node = event2.getPickResult().getIntersectedNode();
                 //判断该插件是否编写了poc
                 if (PluginPOJOList.vulPOJOList.get(vulIndex).getPoc() == null) {
-                    GlobalMenu.getInstance().getItems().get(0).setDisable(true);
+                    contextMenu.getItems().get(0).setDisable(true);
                 }
                 //判断该插件是否编写了exp
                 if (PluginPOJOList.vulPOJOList.get(vulIndex).getExploit() == null) {
-                    GlobalMenu.getInstance().getItems().get(1).setDisable(true);
+                    contextMenu.getItems().get(1).setDisable(true);
                 }
                 //将右击的菜单显示出来
-                GlobalMenu.getInstance().show(node, event2.getScreenX(), event2.getScreenY());
+                contextMenu.show(node, event2.getScreenX(), event2.getScreenY());
+
 
                 //点击右击菜单的poc按钮事件
-                GlobalMenu.getInstance().getItems().get(0).setOnAction(event -> {
+                contextMenu.getItems().get(0).setOnAction(event -> {
                     try {
                         //点击发送到POC后跳转显示的页面
                         Tab vulPocTab = new Tab();
+                        CodeArea pocTargetAddressCodeArea = new CodeArea();
+                        pocTargetAddressCodeArea.setId("pocTargetAddressTextArea");
+                        pocTargetAddressCodeArea.setParagraphGraphicFactory(LineNumberFactory.get(pocTargetAddressCodeArea));
                         vulPocTab.setText(vulTableView.getSelectionModel().getSelectedItems().get(0).getVulName());
                         AnchorPane vulPocTabAnchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/POC/VulPocTabAnchorPane.fxml")));
                         pocScanButton = (JFXButton) vulPocTabAnchorPane.lookup("#pocScanButton");
                         SplitPane pocTargetSplitPane = (SplitPane) vulPocTabAnchorPane.lookup("#pocTargetSplitPane");
                         //POC 扫描地址区域
-                        pocTargetAddressTextArea = (JFXTextArea) pocTargetSplitPane.getItems().get(0);
+                        pocTargetSplitPane.getItems().add(pocTargetAddressCodeArea);
                         //扫描结果输出区域
-                        SplitPane pocResultSplitPane = (SplitPane) pocTargetSplitPane.getItems().get(1);
-                        pocResultTextArea = (JFXTextArea) pocResultSplitPane.getItems().get(1);
+                        SplitPane pocResultSplitPane = (SplitPane) pocTargetSplitPane.getItems().get(0);
+                        CodeArea pocScanResultCodeArea = new CodeArea();
+                        pocScanResultCodeArea.setId("pocScanResultTextArea");
+                        pocScanResultCodeArea.textProperty().addListener((obs, oldText, newText) -> {
+                            pocScanResultCodeArea.setStyleSpans(0, computeHighlighting(newText));
+                        });
+                        pocScanResultCodeArea.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("css/main.css")).toExternalForm());
+                        pocResultSplitPane.getItems().add(pocScanResultCodeArea);
                         pocResultTableView = (TableView<ScanResultPOJO>) pocResultSplitPane.getItems().get(0);
                         TableColumn<ScanResultPOJO, String> poc_Target = (TableColumn<ScanResultPOJO, String>) pocResultTableView.getColumns().get(0);
                         TableColumn<ScanResultPOJO, String> poc_isVul = (TableColumn<ScanResultPOJO, String>) pocResultTableView.getColumns().get(1);
@@ -312,7 +386,44 @@ public class MainController {
                         mainTabPane.getSelectionModel().select(2);
 
                         //加载poc结果表格
-                        pocScanStart();
+                        pocScanButton.setOnAction(pocevent -> {
+                            String dateFormat = "yyyy-MM-dd HH:mm:ss";
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+                            String time = simpleDateFormat.format(new Date());
+                            String[] strings = pocTargetAddressCodeArea.getText().split("\n");
+                            for (String targetAddress : strings) {
+                                try {
+                                    TargetPOJO targetPOJO = new TargetPOJO();
+                                    ResultOutputPOJO resultOutputPOJO = new ResultOutputPOJO();
+                                    targetPOJO.setAddress(Tools.urlParse(targetAddress));
+                                    scanResultPOJO = (ScanResultPOJO) PluginPOJOList.vulPOJOList.get(vulIndex).getPoc().doCheck(targetPOJO, resultOutputPOJO);
+                                    scanResultPOJO.setTime(time);
+                                    pocResultTableView.getItems().addAll(scanResultPOJO);
+                                    pocScanResultCodeArea.appendText("[>]"+targetAddress +"开始扫描........\n\n");
+                                    if(resultOutputPOJO.getSuccessList().size()!=0){
+                                        pocScanResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getSuccessList()) + "\n");
+                                    }
+                                    if (resultOutputPOJO.getRawList().size()!=0){
+                                        pocScanResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getRawList()) + "\n");
+                                    }
+                                    if (resultOutputPOJO.getDebugList().size()!=0){
+                                        pocScanResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getDebugList()) + "\n");
+                                    }
+                                    if (resultOutputPOJO.getErrorList().size()!=0){
+                                        pocScanResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getErrorList()) + "\n");
+                                    }
+                                    if (resultOutputPOJO.getFailList().size()!=0){
+                                        pocScanResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getFailList()) + "\n");
+                                    }
+                                    if (resultOutputPOJO.getWarningList().size()!=0){
+                                        pocScanResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getWarningList()) + "\n");
+                                    }
+                                    pocScanResultCodeArea.appendText("[=]" + targetAddress + "漏洞扫描结束!!!!!!!!\n\n\n");
+                                } catch (Throwable ignored) {
+                                }
+                            }
+
+                        });
 
 
                     } catch (Throwable e) {
@@ -323,10 +434,11 @@ public class MainController {
 
 
                 //点击右击菜单的exp按钮事件
-                GlobalMenu.getInstance().getItems().get(1).setOnAction(event1 -> {
+                contextMenu.getItems().get(1).setOnAction(event1 -> {
                     try {
                         //点击发送到EXP跳转到漏洞利用页面
                         Tab vulExpTab = new Tab();
+                        TextField vulExpTargetAddressTextField;
                         vulExpTab.setText(vulTableView.getSelectionModel().getSelectedItems().get(0).getVulPluginName());
                         AnchorPane vulExpTabAnchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/Vul/VulExpTabAnchorPane.fxml")));
                         vulExpTab.setContent(vulExpTabAnchorPane);
@@ -341,15 +453,30 @@ public class MainController {
                         //加载漏洞利用页面的子TabPane页面
                         TabPane vulResultTabPane = (TabPane) vulExpTabAnchorPane.lookup("#vulExpResultTabPane");
                         List<Exploit> exploitList = PluginPOJOList.vulPOJOList.get(vulIndex).getExploit();
-
-
                         HashMap<String, Exploit> exploitHashMap = new HashMap<>();
+
                         for (Exploit exp : exploitList) {
                             Tab vulExpResultTab = new Tab();
-                            exploitHashMap.put(exp.getExploitTabTitle(), exp);
+                            exploitHashMap.put(exp.getExploitTabTitle(),exp);
                             vulResultTabPane.getTabs().add(vulExpResultTab);
                             //设置漏洞利用插件的TabTitle
                             vulExpResultTab.setText(exp.getExploitTabTitle());
+
+
+                            CodeArea vulExpResultCodeArea = new CodeArea();
+                            vulExpResultCodeArea.setId("vulExpResultCodeArea");
+                            vulExpResultCodeArea.setWrapText(true);
+                            vulExpResultCodeArea.setEditable(false);
+                            vulExpResultCodeArea.textProperty().addListener((obs, oldText, newText) -> {
+                                vulExpResultCodeArea.setStyleSpans(0, computeHighlighting(newText));
+                            });
+                            vulExpResultCodeArea.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("css/main.css")).toExternalForm());
+
+
+                            CodeArea vulExpArgsCodeArea = new CodeArea();
+                            vulExpArgsCodeArea.setWrapText(true);
+
+
                             //取出当前选择表格的参数列表，用于下面设置TextArea的预设Arg值
                             ArgsUsagePOJO vulExpArgsUsagePOJO = (ArgsUsagePOJO) exp.getExploitCustomArgs();
 
@@ -359,59 +486,77 @@ public class MainController {
 
                             if (vulExpArgsUsagePOJO == null) {
                                 vulExpTabResultAnchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/vul/VulExpTabResultAnchorPane.fxml")));
-                                vulExpResultTextArea = (TextArea) vulExpTabResultAnchorPane.lookup("#vulExpResultTextArea");
+                                vulExpResultCodeArea.setPrefSize(1125,473);
+                                vulExpResultCodeArea.setLayoutX(3);
+                                vulExpResultCodeArea.setLayoutY(60);
+                                vulExpTabResultAnchorPane .getChildren().add(vulExpResultCodeArea);
                                 vulExpResultTab.setContent(vulExpTabResultAnchorPane);
                             } else {
                                 vulExpTabResultAnchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/vul/VulExpTabArgsAnchorPane.fxml")));
-                                vulExpArgsTextArea = (TextArea) vulExpTabResultAnchorPane.lookup("#vulExpArgsTextArea");
-                                vulExpArgsTextArea.setWrapText(true);
+                                vulExpArgsCodeArea.setPrefSize(1128,112);
+                                vulExpArgsCodeArea.setLayoutX(3);
+                                vulExpArgsCodeArea.setLayoutY(42);
+                                vulExpTabResultAnchorPane.getChildren().add(vulExpArgsCodeArea);
 
-                                vulExpResultTextArea = (TextArea) vulExpTabResultAnchorPane.lookup("#vulExpResultTextArea");
+                                vulExpResultCodeArea.setPrefSize(1125,325);
+                                vulExpResultCodeArea.setLayoutX(3);
+                                vulExpResultCodeArea.setLayoutY(205);
+                                vulExpTabResultAnchorPane.getChildren().add(vulExpResultCodeArea);
+
                                 vulExpResultTab.setContent(vulExpTabResultAnchorPane);
 
 
                                 for (ArgsInfo argsInfo : vulExpArgsUsagePOJO.getArgsInfoList()) {
                                     argsInfoPOJO = (ArgsInfoPOJO) argsInfo;
-                                    vulExpArgsTextArea.appendText(argsInfoPOJO.getName() + "=\n");
+                                    vulExpArgsCodeArea.appendText(argsInfoPOJO.getName() + "=\n");
                                 }
                             }
-                        }
 
-                        vulExpStartButton.setOnAction(event -> {
-                            TargetPOJO targetPOJO = new TargetPOJO();
-                            //设置每个参数对应的value值
-                            Map<String, Object> args = new HashMap<>();
-                            ResultOutputPOJO resultOutputPOJO = new ResultOutputPOJO();
-                            Exploit exploit = exploitHashMap.get(vulResultTabPane.getSelectionModel().getSelectedItem().getText());
-                            ArgsUsagePOJO argsUsagePOJO = (ArgsUsagePOJO) exploit.getExploitCustomArgs();
-                            AnchorPane resultAnchorPane = (AnchorPane) vulResultTabPane.getSelectionModel().getSelectedItem().getContent();
-                            TextArea resultTextArea = (TextArea) resultAnchorPane.lookup("#vulExpResultTextArea");
-                            resultTextArea.setWrapText(true);
-                            if (argsUsagePOJO != null) {
-                                String argsText = vulExpArgsTextArea.getText();
-                                for (ArgsInfo argsInfo : argsUsagePOJO.getArgsInfoList()) {
-                                    ArgsInfoPOJO finalArgsInfoPOJO = (ArgsInfoPOJO) argsInfo;
-                                    String[] argsValues = argsText.split(finalArgsInfoPOJO.getName() + "=");
-                                    String value = argsValues[1].substring(0, argsValues[1].indexOf("\n"));
-                                    args.put(finalArgsInfoPOJO.getName(), value);
+                            vulExpStartButton.setOnAction(event -> {
+                                TargetPOJO targetPOJO = new TargetPOJO();
+                                //设置每个参数对应的value值
+                                Map<String, Object> args = new HashMap<>();
+                                ResultOutputPOJO resultOutputPOJO = new ResultOutputPOJO();
+                                Exploit exploit = exploitHashMap.get(vulResultTabPane.getSelectionModel().getSelectedItem().getText());
+                                ArgsUsagePOJO argsUsagePOJO = (ArgsUsagePOJO) exploit.getExploitCustomArgs();
+                                AnchorPane resultAnchorPane = (AnchorPane) vulResultTabPane.getSelectionModel().getSelectedItem().getContent();
+                                CodeArea finalVulExpResultCodeArea = (CodeArea) resultAnchorPane.lookup("#vulExpResultCodeArea");
+                                if (argsUsagePOJO != null) {
+                                    String argsText = vulExpArgsCodeArea.getText();
+                                    for (ArgsInfo argsInfo : argsUsagePOJO.getArgsInfoList()) {
+                                        ArgsInfoPOJO finalArgsInfoPOJO = (ArgsInfoPOJO) argsInfo;
+                                        String[] argsValues = argsText.split(finalArgsInfoPOJO.getName() + "=");
+                                        String value = argsValues[1].substring(0, argsValues[1].indexOf("\n"));
+                                        args.put(finalArgsInfoPOJO.getName(), value);
+                                    }
                                 }
-                            }
-                            try {
-                                targetPOJO.setAddress(Tools.urlParse(vulExpTargetAddressTextField.getText()));
-                                exploit.doExploit(targetPOJO, args, resultOutputPOJO);
-                                resultTextArea.appendText(
-                                        exploit.getExploitTabTitle() + "\t[>]开始>>>>>>>>\n\n" +
-                                                String.join("\n", resultOutputPOJO.getSuccessList()) + "\n" +
-                                                String.join("\n", resultOutputPOJO.getRawList()) + "\n" +
-                                                String.join("\n", resultOutputPOJO.getDebugList()) + "\n" +
-                                                String.join("\n", resultOutputPOJO.getErrorList()) + "\n" +
-                                                String.join("\n", resultOutputPOJO.getFailList()) + "\n" +
-                                                String.join("\n", resultOutputPOJO.getWarningList()) + "\n" +
-                                                "<<<<<<<<" + exploit.getExploitTabTitle() + "  |  结束>>>>>>>>\n\n"
-                                );
-                            } catch (Throwable ignored) {
-                            }
-                        });
+                                try {
+                                    targetPOJO.setAddress(Tools.urlParse(vulExpTargetAddressTextField.getText()));
+                                    exploit.doExploit(targetPOJO, args, resultOutputPOJO);
+                                    finalVulExpResultCodeArea.appendText("[>]"+exploit.getExploitTabTitle() +"开始利用........\n\n");
+                                    if(resultOutputPOJO.getSuccessList().size()!=0){
+                                        finalVulExpResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getSuccessList()) + "\n");
+                                    }
+                                    if (resultOutputPOJO.getRawList().size()!=0){
+                                        finalVulExpResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getRawList()) + "\n");
+                                    }
+                                    if (resultOutputPOJO.getDebugList().size()!=0){
+                                        finalVulExpResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getDebugList()) + "\n");
+                                    }
+                                    if (resultOutputPOJO.getErrorList().size()!=0){
+                                        finalVulExpResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getErrorList()) + "\n");
+                                    }
+                                    if (resultOutputPOJO.getFailList().size()!=0){
+                                        finalVulExpResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getFailList()) + "\n");
+                                    }
+                                    if (resultOutputPOJO.getWarningList().size()!=0){
+                                        finalVulExpResultCodeArea.appendText(String.join("\n", resultOutputPOJO.getWarningList()) + "\n");
+                                    }
+                                    finalVulExpResultCodeArea.appendText("[=]" + exploit.getExploitTabTitle() + "漏洞利用结束!!!!!!!!\n\n\n");
+                                } catch (Throwable ignored) {
+                                }
+                            });
+                        }
                     } catch (Throwable ignored) {
                     }
                 });
@@ -421,37 +566,8 @@ public class MainController {
     }
 
 
-    private void pocScanStart() {
-        pocScanButton.setOnAction(event -> {
-            String dateFormat = "yyyy-MM-dd HH:mm:ss";
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
-            String time = simpleDateFormat.format(new Date());
-            pocResultTextArea.setText("");
-            String[] strings = pocTargetAddressTextArea.getText().split("\n");
-            for (String targetAddress : strings) {
-                try {
-                    TargetPOJO targetPOJO = new TargetPOJO();
-                    ResultOutputPOJO resultOutputPOJO = new ResultOutputPOJO();
-                    targetPOJO.setAddress(Tools.urlParse(targetAddress));
-                    scanResultPOJO = (ScanResultPOJO) PluginPOJOList.vulPOJOList.get(vulIndex).getPoc().doCheck(targetPOJO, resultOutputPOJO);
-                    scanResultPOJO.setTime(time);
-                    pocResultTableView.getItems().addAll(scanResultPOJO);
-                    pocResultTextArea.appendText(
-                            "[>]开始扫描>>>>>>>>" + targetAddress + "\n\n" +
-                                    String.join("\n", resultOutputPOJO.getSuccessList()) + "\n" +
-                                    String.join("\n", resultOutputPOJO.getRawList()) + "\n" +
-                                    String.join("\n", resultOutputPOJO.getDebugList()) + "\n" +
-                                    String.join("\n", resultOutputPOJO.getErrorList()) + "\n" +
-                                    String.join("\n", resultOutputPOJO.getFailList()) + "\n" +
-                                    String.join("\n", resultOutputPOJO.getWarningList()) + "\n" +
-                                    "<<<<<<<<" + targetAddress + "  |  扫描结束>>>>>>>>\n\n"
-                    );
-                } catch (Throwable ignored) {
-                }
-            }
 
-        });
-    }
+
 
 
     @FXML
@@ -656,4 +772,26 @@ public class MainController {
         vulTableView.setItems(sortedList);
     }
 
+
+    private static StyleSpans<Collection<String>> computeHighlighting(String text) {
+        Matcher matcher = PATTERN.matcher(text);
+        int lastKwEnd = 0;
+        StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
+        while(matcher.find()) {
+            String styleClass =
+                    matcher.group("START") != null ? "start" :
+                            matcher.group("STOP") != null ? "stop" :
+                                    matcher.group("ERROR") != null ? "error" :
+                                            matcher.group("WARNING") != null ? "warning" :
+                                                    matcher.group("FAIL") != null ? "fail" :
+                                                            matcher.group("SUCCESS") != null ? "success" :
+                                                                    matcher.group("INFO") != null ? "info" :
+                                                                            null; /* never happens */ assert styleClass != null;
+            spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
+            spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+            lastKwEnd = matcher.end();
+        }
+        spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
+        return spansBuilder.create();
+    }
 }

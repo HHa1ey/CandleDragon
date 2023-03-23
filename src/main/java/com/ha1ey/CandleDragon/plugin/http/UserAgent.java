@@ -34,8 +34,8 @@ public class UserAgent {
 
     public static String getRandomUA() {
         Random random = new Random();
-        random.nextInt(32);
-        return list.get(random.nextInt(32));
+        random.nextInt(22);
+        return list.get(random.nextInt(22));
     }
 
 }

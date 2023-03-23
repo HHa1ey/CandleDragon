@@ -13,10 +13,51 @@
 
 
 
-.text-area {
-    -fx-font-size: 15;
-}
 
 .jfx-tab-pane .headers-region .tab .tab-container .tab-close-button > .jfx-svg-glyph {
     -fx-background-color: red;
+}
+
+
+
+.start {
+    -fx-fill: green;
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+}
+.stop {
+    -fx-fill: green;
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+}
+
+.error {
+    -fx-fill: firebrick;
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+}
+
+.info {
+    -fx-fill: teal;
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+}
+.success {
+    -fx-fill: blue;
+    -fx-font-size: 15;
+}
+
+.warning {
+    -fx-fill: red;
+    -fx-font-size: 15;
+}
+
+.fail {
+    -fx-fill: red;
+    -fx-font-size: 15;
+}
+
+.args {
+    -fx-fill: green;
+    -fx-font-size: 15;
 }
