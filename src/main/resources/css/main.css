@@ -14,50 +14,50 @@
 
 
 
-.jfx-tab-pane .headers-region .tab .tab-container .tab-close-button > .jfx-svg-glyph {
-    -fx-background-color: red;
-}
-
-
 
 .start {
     -fx-fill: green;
     -fx-font-weight: bold;
-    -fx-font-size: 15;
+    -fx-font-size: 14;
 }
 .stop {
     -fx-fill: green;
     -fx-font-weight: bold;
-    -fx-font-size: 15;
+    -fx-font-size: 14;
 }
 
 .error {
     -fx-fill: firebrick;
     -fx-font-weight: bold;
-    -fx-font-size: 15;
+    -fx-font-size: 14;
 }
 
 .info {
     -fx-fill: teal;
     -fx-font-weight: bold;
-    -fx-font-size: 15;
+    -fx-font-size: 14;
 }
 .success {
     -fx-fill: blue;
-    -fx-font-size: 15;
+    -fx-font-size: 14;
 }
 
 .warning {
     -fx-fill: red;
-    -fx-font-size: 15;
+    -fx-font-size: 14;
 }
 
 .fail {
     -fx-fill: red;
-    -fx-font-size: 15;
+    -fx-font-size: 14;
+}
+
+.output {
+    -fx-fill: green;
+    -fx-font-size: 14;
 }
 
 .args {
     -fx-fill: green;
-    -fx-font-size: 15;
+    -fx-font-size: 14;
 }

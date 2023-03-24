@@ -104,7 +104,7 @@ public class MainController {
     int vulIndex;
 
     TableView<ScanResultPOJO> pocResultTableView;
-    ScanResultPOJO scanResultPOJO = new ScanResultPOJO();
+
 
     //EXP模块
     JFXButton vulExpStartButton = new JFXButton();
@@ -114,11 +114,12 @@ public class MainController {
 
     private static final String START_PATTERN = "\\[>\\]\\S*";
     private static final String STOP_PATTERN = "\\[=\\]\\S*";
-    private static final String ERROR_PATTERN = "\\[x\\]\\S*";
+    private static final String ERROR_PATTERN = "\\[x\\]\\S+|.*[\\)]";
     private static final String WARNING_PATTERN = "\\[!\\]\\S*";
     private static final String FAIL_PATTERN = "\\[-\\]\\S*";
     private static final String SUCCESS_PATTERN = "\\[+\\]\\S*";
     private static final String INFO_PATTERN = "\\[*\\]\\S*";
+    private static final String OUTPUT_PATTERN = "(\\*)(.*)";
     private static final Pattern PATTERN = Pattern.compile(
             "(?<START>" + START_PATTERN + ")"
                     + "|(?<STOP>" + STOP_PATTERN + ")"
@@ -127,6 +128,7 @@ public class MainController {
                     + "|(?<FAIL>" + FAIL_PATTERN + ")"
                     + "|(?<SUCCESS>" + SUCCESS_PATTERN + ")"
                     + "|(?<INFO>" + INFO_PATTERN + ")"
+            +"|(?<OUTPUT>" + OUTPUT_PATTERN + ")"
     );
 
 
@@ -284,7 +286,7 @@ public class MainController {
                                 }
                                 finalInfoDetectorResultCodeArea.appendText(
                                         "\n*************************************************\n" +
-                                        targetPOJO.getAddress() + "\t|\t" + infos.get(targetPOJO.getAddress()) + "\n" +
+                                        "*"+targetPOJO.getAddress() + "\t|\t" + infos.get(targetPOJO.getAddress()) + "\n" +
                                         "*************************************************\n" +
                                         "[=]" + infoDetect.getInfoDetectorTabTitle() + "探测结束!!!!!!!!\n\n\n");
                             } catch (Throwable e) {
@@ -396,7 +398,7 @@ public class MainController {
                                     TargetPOJO targetPOJO = new TargetPOJO();
                                     ResultOutputPOJO resultOutputPOJO = new ResultOutputPOJO();
                                     targetPOJO.setAddress(Tools.urlParse(targetAddress));
-                                    scanResultPOJO = (ScanResultPOJO) PluginPOJOList.vulPOJOList.get(vulIndex).getPoc().doCheck(targetPOJO, resultOutputPOJO);
+                                    ScanResultPOJO scanResultPOJO = (ScanResultPOJO) PluginPOJOList.vulPOJOList.get(vulIndex).getPoc().doCheck(targetPOJO, resultOutputPOJO);
                                     scanResultPOJO.setTime(time);
                                     pocResultTableView.getItems().addAll(scanResultPOJO);
                                     pocScanResultCodeArea.appendText("[>]"+targetAddress +"开始扫描........\n\n");
@@ -786,6 +788,7 @@ public class MainController {
                                                     matcher.group("FAIL") != null ? "fail" :
                                                             matcher.group("SUCCESS") != null ? "success" :
                                                                     matcher.group("INFO") != null ? "info" :
+                                                                            matcher.group("OUTPUT") != null ? "output" :
                                                                             null; /* never happens */ assert styleClass != null;
             spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
             spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
