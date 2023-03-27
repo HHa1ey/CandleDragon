@@ -112,14 +112,14 @@ public class MainController {
 
 
 
-    private static final String START_PATTERN = "\\[>\\]\\S*";
-    private static final String STOP_PATTERN = "\\[=\\]\\S*";
-    private static final String ERROR_PATTERN = "\\[x\\]\\S+|.*[\\)]";
-    private static final String WARNING_PATTERN = "\\[!\\]\\S*";
-    private static final String FAIL_PATTERN = "\\[-\\]\\S*";
-    private static final String SUCCESS_PATTERN = "\\[+\\]\\S*";
-    private static final String INFO_PATTERN = "\\[*\\]\\S*";
-    private static final String OUTPUT_PATTERN = "(\\*)(.*)";
+    private static final String START_PATTERN = "\\[>\\][\\s\\S]*?\\.{8}";
+    private static final String STOP_PATTERN = "\\[=\\][\\s\\S]*?\\!{8}";
+    private static final String ERROR_PATTERN = "\\[x\\][\\s\\S]*?(?=\\[=])";
+    private static final String WARNING_PATTERN = "\\[!\\][\\s\\S]*?(?=\\[=])";
+    private static final String FAIL_PATTERN = "\\[-\\][\\s\\S]*?(?=\\[=])";
+    private static final String SUCCESS_PATTERN = "\\[\\+\\][\\s\\S]*?(?=\\[=])";
+    private static final String INFO_PATTERN = "\\[\\*\\][\\s\\S]*?(?=\\[=])";
+    private static final String OUTPUT_PATTERN = "\\*{47}\\n([\\s\\S]*?)\\n\\*{47}\n";
     private static final Pattern PATTERN = Pattern.compile(
             "(?<START>" + START_PATTERN + ")"
                     + "|(?<STOP>" + STOP_PATTERN + ")"
@@ -335,16 +335,17 @@ public class MainController {
                 MenuItem sendToEXP = new MenuItem("发送到EXP");
                 contextMenu.getItems().addAll(sendToPOC,sendToEXP);
                 Node node = event2.getPickResult().getIntersectedNode();
+                //将右击的菜单显示出来
+                contextMenu.show(node, event2.getScreenX(), event2.getScreenY());
+
                 //判断该插件是否编写了poc
                 if (PluginPOJOList.vulPOJOList.get(vulIndex).getPoc() == null) {
                     contextMenu.getItems().get(0).setDisable(true);
                 }
                 //判断该插件是否编写了exp
-                if (PluginPOJOList.vulPOJOList.get(vulIndex).getExploit() == null) {
+                if (PluginPOJOList.vulPOJOList.get(vulIndex).getExploit().size() == 0) {
                     contextMenu.getItems().get(1).setDisable(true);
                 }
-                //将右击的菜单显示出来
-                contextMenu.show(node, event2.getScreenX(), event2.getScreenY());
 
 
                 //点击右击菜单的poc按钮事件
@@ -365,6 +366,7 @@ public class MainController {
                         SplitPane pocResultSplitPane = (SplitPane) pocTargetSplitPane.getItems().get(0);
                         CodeArea pocScanResultCodeArea = new CodeArea();
                         pocScanResultCodeArea.setId("pocScanResultTextArea");
+                        pocScanResultCodeArea.setWrapText(true);
                         pocScanResultCodeArea.textProperty().addListener((obs, oldText, newText) -> {
                             pocScanResultCodeArea.setStyleSpans(0, computeHighlighting(newText));
                         });
