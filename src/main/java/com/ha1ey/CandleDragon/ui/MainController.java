@@ -204,6 +204,7 @@ public class MainController {
 
 
                         CodeArea infoDetectorArgsCodeArea = new CodeArea();
+                        infoDetectorArgsCodeArea.setId("infoDetectorArgsCodeArea");
                         infoDetectorArgsCodeArea.setWrapText(true);
 
                         //取出当前选择表格的参数列表，用于下面设置TextArea的预设Arg值
@@ -253,14 +254,18 @@ public class MainController {
                             ArgsUsagePOJO argsUsagePOJO = (ArgsUsagePOJO) infoDetect.getInfoDetectorCustomArgs();
                             AnchorPane anchorPane = (AnchorPane) infoDetectorResultTabPane.getSelectionModel().getSelectedItem().getContent();
                             CodeArea finalInfoDetectorResultCodeArea = (CodeArea) anchorPane.lookup("#infoDetectorResultCodeArea");
+                            CodeArea finalInfoDetectorArgsCodeArea = (CodeArea) anchorPane.lookup("#infoDetectorArgsCodeArea");
+                            Pattern pattern = Pattern.compile("(?<=^|\\G)[^=]*=(.*)");
                             if (argsUsagePOJO != null) {
-                                String argsText = infoDetectorArgsCodeArea.getText();
-                                for (ArgsInfo argsInfo : argsUsagePOJO.getArgsInfoList()) {
-                                    ArgsInfoPOJO finalArgsInfoPOJO = (ArgsInfoPOJO) argsInfo;
-                                    String[] argsValues = argsText.split(finalArgsInfoPOJO.getName() + "=");
-                                    String value = argsValues[1].substring(0, argsValues[1].indexOf("\n"));
-                                    args.put(finalArgsInfoPOJO.getName(), value);
+                                for (int i=0; i<argsUsagePOJO.getArgsInfoList().size();i++){
+                                    ArgsInfoPOJO finalArgsInfoPOJO = (ArgsInfoPOJO) argsUsagePOJO.getArgsInfoList().get(i);
+                                    String lineContent = finalInfoDetectorArgsCodeArea.getParagraph(i).getText();
+                                    Matcher matcher = pattern.matcher(lineContent);
+                                    while (matcher.find()){
+                                        args.put(finalArgsInfoPOJO.getName(),matcher.group(1));
+                                    }
                                 }
+
                             }
                             try {
                                 targetPOJO.setAddress(Tools.urlParse(infoDetectorTargetAddressTextField.getText()));
@@ -289,13 +294,11 @@ public class MainController {
                                         "*"+targetPOJO.getAddress() + "\t|\t" + infos.get(targetPOJO.getAddress()) + "\n" +
                                         "*************************************************\n" +
                                         "[=]" + infoDetect.getInfoDetectorTabTitle() + "探测结束!!!!!!!!\n\n\n");
-                            } catch (Throwable e) {
-                                e.printStackTrace();
+                            } catch (Throwable ignored) {
                             }
                         });
                     }
-                } catch (Throwable e) {
-                    e.printStackTrace();
+                } catch (Throwable ignored) {
                 }
             }
         });
@@ -343,7 +346,7 @@ public class MainController {
                     contextMenu.getItems().get(0).setDisable(true);
                 }
                 //判断该插件是否编写了exp
-                if (PluginPOJOList.vulPOJOList.get(vulIndex).getExploit().size() == 0) {
+                if (PluginPOJOList.vulPOJOList.get(vulIndex).getExploitList() ==null) {
                     contextMenu.getItems().get(1).setDisable(true);
                 }
 
@@ -430,8 +433,7 @@ public class MainController {
                         });
 
 
-                    } catch (Throwable e) {
-                        e.printStackTrace();
+                    } catch (Throwable ignored) {
                     }
 
                 });
@@ -442,7 +444,6 @@ public class MainController {
                     try {
                         //点击发送到EXP跳转到漏洞利用页面
                         Tab vulExpTab = new Tab();
-                        TextField vulExpTargetAddressTextField;
                         vulExpTab.setText(vulTableView.getSelectionModel().getSelectedItems().get(0).getVulPluginName());
                         AnchorPane vulExpTabAnchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/Vul/VulExpTabAnchorPane.fxml")));
                         vulExpTab.setContent(vulExpTabAnchorPane);
@@ -453,10 +454,10 @@ public class MainController {
                         //漏洞利用开始按钮
                         vulExpStartButton = (JFXButton) vulExpTabAnchorPane.lookup("#vulExpStartButton");
                         //漏洞利用插件URL地址按钮
-                        vulExpTargetAddressTextField = (TextField) vulExpTabAnchorPane.lookup("#vulExpTargetAddressTextField");
+                        TextField vulExpTargetAddressTextField = (TextField) vulExpTabAnchorPane.lookup("#vulExpTargetAddressTextField");
                         //加载漏洞利用页面的子TabPane页面
                         TabPane vulResultTabPane = (TabPane) vulExpTabAnchorPane.lookup("#vulExpResultTabPane");
-                        List<Exploit> exploitList = PluginPOJOList.vulPOJOList.get(vulIndex).getExploit();
+                        List<Exploit> exploitList = PluginPOJOList.vulPOJOList.get(vulIndex).getExploitList();
                         HashMap<String, Exploit> exploitHashMap = new HashMap<>();
 
                         for (Exploit exp : exploitList) {
@@ -465,7 +466,6 @@ public class MainController {
                             vulResultTabPane.getTabs().add(vulExpResultTab);
                             //设置漏洞利用插件的TabTitle
                             vulExpResultTab.setText(exp.getExploitTabTitle());
-
 
                             CodeArea vulExpResultCodeArea = new CodeArea();
                             vulExpResultCodeArea.setId("vulExpResultCodeArea");
@@ -478,6 +478,7 @@ public class MainController {
 
 
                             CodeArea vulExpArgsCodeArea = new CodeArea();
+                            vulExpArgsCodeArea.setId("vulExpArgsCodeArea");
                             vulExpArgsCodeArea.setWrapText(true);
 
 
@@ -489,14 +490,15 @@ public class MainController {
                             ArgsInfoPOJO argsInfoPOJO;
 
                             if (vulExpArgsUsagePOJO == null) {
-                                vulExpTabResultAnchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/vul/VulExpTabResultAnchorPane.fxml")));
+                                vulExpTabResultAnchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/Vul/VulExpTabResultAnchorPane.fxml")));
                                 vulExpResultCodeArea.setPrefSize(1125,473);
                                 vulExpResultCodeArea.setLayoutX(3);
                                 vulExpResultCodeArea.setLayoutY(60);
-                                vulExpTabResultAnchorPane .getChildren().add(vulExpResultCodeArea);
+                                vulExpTabResultAnchorPane.getChildren().add(vulExpResultCodeArea);
                                 vulExpResultTab.setContent(vulExpTabResultAnchorPane);
+
                             } else {
-                                vulExpTabResultAnchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/vul/VulExpTabArgsAnchorPane.fxml")));
+                                vulExpTabResultAnchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/Vul/VulExpTabArgsAnchorPane.fxml")));
                                 vulExpArgsCodeArea.setPrefSize(1128,112);
                                 vulExpArgsCodeArea.setLayoutX(3);
                                 vulExpArgsCodeArea.setLayoutY(42);
@@ -525,14 +527,18 @@ public class MainController {
                                 ArgsUsagePOJO argsUsagePOJO = (ArgsUsagePOJO) exploit.getExploitCustomArgs();
                                 AnchorPane resultAnchorPane = (AnchorPane) vulResultTabPane.getSelectionModel().getSelectedItem().getContent();
                                 CodeArea finalVulExpResultCodeArea = (CodeArea) resultAnchorPane.lookup("#vulExpResultCodeArea");
+                                CodeArea finalVulExpArgsCodeArea = (CodeArea) resultAnchorPane.lookup("#vulExpArgsCodeArea");
+                                Pattern pattern = Pattern.compile("(?<=^|\\G)[^=]*=(.*)");
                                 if (argsUsagePOJO != null) {
-                                    String argsText = vulExpArgsCodeArea.getText();
-                                    for (ArgsInfo argsInfo : argsUsagePOJO.getArgsInfoList()) {
-                                        ArgsInfoPOJO finalArgsInfoPOJO = (ArgsInfoPOJO) argsInfo;
-                                        String[] argsValues = argsText.split(finalArgsInfoPOJO.getName() + "=");
-                                        String value = argsValues[1].substring(0, argsValues[1].indexOf("\n"));
-                                        args.put(finalArgsInfoPOJO.getName(), value);
+                                    for (int i=0; i<argsUsagePOJO.getArgsInfoList().size();i++){
+                                        ArgsInfoPOJO finalArgsInfoPOJO = (ArgsInfoPOJO) argsUsagePOJO.getArgsInfoList().get(i);
+                                        String lineContent = finalVulExpArgsCodeArea.getParagraph(i).getText();
+                                        Matcher matcher = pattern.matcher(lineContent);
+                                        while (matcher.find()){
+                                            args.put(finalArgsInfoPOJO.getName(),matcher.group(1));
+                                        }
                                     }
+
                                 }
                                 try {
                                     targetPOJO.setAddress(Tools.urlParse(vulExpTargetAddressTextField.getText()));

@@ -2,6 +2,7 @@ package com.ha1ey.CandleDragon.entity;
 
 import com.ha1ey.CandleDragon.plugin.*;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class VulPOJO implements VulPluginInfo {
     private String description;
     private String disclosureTime;
     private Poc poc;
-    private List<Exploit> exploitList = new LinkedList<>();
+    private List<Exploit> exploitList;
     private HelpPluginInfo helpPluginInfo = new HelpPluginInfoPOJO();
 
 
@@ -77,7 +78,7 @@ public class VulPOJO implements VulPluginInfo {
         return this.disclosureTime;
     }
 
-    public List<Exploit> getExploit() {
+    public List<Exploit> getExploitList() {
         return this.exploitList;
     }
 
