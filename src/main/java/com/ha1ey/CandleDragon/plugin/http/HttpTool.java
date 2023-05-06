@@ -1,6 +1,7 @@
 package com.ha1ey.CandleDragon.plugin.http;
 
 
+import com.ha1ey.CandleDragon.tools.Tools;
 import com.ha1ey.CandleDragon.ui.MainController;
 
 import javax.net.ssl.HostnameVerifier;
@@ -8,15 +9,14 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.Proxy;
-import java.net.SocketTimeoutException;
-import java.net.URL;
+import java.net.*;
+import java.nio.file.Files;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.util.HashMap;
+import java.util.Map;
 
 public class HttpTool {
 
@@ -45,7 +45,7 @@ public class HttpTool {
     public static Response post(String url, HashMap<String, String> headers, String postStr, int connectTimeout) {
         Response response = new Response(0, null, null, null);
         try {
-            HttpURLConnection conn = getConn(url, connectTimeout);
+            HttpURLConnection conn = getConn(url,connectTimeout);
             conn.setRequestMethod("POST");
 
             for (String key : headers.keySet()) {
@@ -58,6 +58,52 @@ public class HttpTool {
             response = getResponse(conn);
         } catch (Exception var8) {
             response.setError(var8.getMessage());
+        }
+        return response;
+    }
+
+    public static  Response sendFile(String url, HashMap<String,String> headers, Map<String,String> params, String fileKey, String filePath, String reFileName, int connectTimeout) {
+        Response response = new Response(0, null, null, null);
+        String boundary = "------WebKitFormBoundary" + Tools.randomStr(16);
+        try {
+            HttpURLConnection conn = getConn(url, connectTimeout);
+            File file = new File(filePath);
+            if (reFileName.equals("")) {
+                reFileName = file.getName();
+            }
+            conn.setRequestMethod("POST");
+            for (String key : headers.keySet()) {
+                conn.setRequestProperty(key, headers.get(key));
+            }
+            conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+            conn.setRequestProperty("Content-Length", String.valueOf(file.length()));
+            OutputStream outputStream = conn.getOutputStream();
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream, MainController.charset), true);
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                writer.append("--").append(boundary).append("\r\n");
+                writer.append("Content-Disposition: form-data; name=\"").append(entry.getKey()).append("\"").append("\r\n");
+                writer.append("\r\n");
+                writer.append(entry.getValue()).append("\r\n");
+                writer.flush();
+            }
+            writer.append("--").append(boundary).append("\r\n");
+            writer.append("Content-Disposition: form-data; name=\"").append(fileKey).append("\"; filename=\"").append(reFileName).append("\"").append("\r\n");
+            writer.append("Content-Type: ").append(Files.probeContentType(file.toPath())).append("\r\n");
+            writer.append("\r\n");
+            writer.flush();
+            FileInputStream fileInputStream = new FileInputStream(file);
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            fileInputStream.close();
+            writer.append("\r\n").flush();
+            writer.append("--").append(boundary).append("--").append("\r\n");
+            writer.close();
+            response = getResponse(conn);
+        }catch (Exception var9){
+            response.setError(var9.getMessage());
         }
         return response;
     }

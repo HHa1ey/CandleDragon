@@ -119,7 +119,7 @@ public class MainController {
     private static final String FAIL_PATTERN = "\\[-\\][\\s\\S]*?(?=\\[=])";
     private static final String SUCCESS_PATTERN = "\\[\\+\\][\\s\\S]*?(?=\\[=])";
     private static final String INFO_PATTERN = "\\[\\*\\][\\s\\S]*?(?=\\[=])";
-    private static final String OUTPUT_PATTERN = "\\*{47}\\n([\\s\\S]*?)\\n\\*{47}\n";
+    private static final String OUTPUT_PATTERN = "\\*{49}\\n([\\s\\S]*?)\\n\\*{49}\n";
     private static final Pattern PATTERN = Pattern.compile(
             "(?<START>" + START_PATTERN + ")"
                     + "|(?<STOP>" + STOP_PATTERN + ")"
@@ -237,9 +237,16 @@ public class MainController {
                             infoDetectorTabResultAnchorPane.getChildren().add(infoDetectorArgsCodeArea );
                             infoDetectorResultTab.setContent(infoDetectorTabResultAnchorPane);
 
+                            int i = 0;
                             for (ArgsInfo argsInfo : infoDetectorArgsUsagePOJO.getArgsInfoList()) {
                                 argsInfoPOJO = (ArgsInfoPOJO) argsInfo;
-                                infoDetectorArgsCodeArea.appendText(argsInfoPOJO.getName() + "=\n");
+                                String line = argsInfoPOJO.getName()+"="+argsInfoPOJO.getDefaultValue();
+
+                                if (i < infoDetectorArgsUsagePOJO.getArgsInfoList().size() - 1){
+                                   line +="\n";
+                                }
+                                infoDetectorArgsCodeArea.appendText(line);
+                                i++;
                             }
                         }
 
@@ -255,6 +262,7 @@ public class MainController {
                             AnchorPane anchorPane = (AnchorPane) infoDetectorResultTabPane.getSelectionModel().getSelectedItem().getContent();
                             CodeArea finalInfoDetectorResultCodeArea = (CodeArea) anchorPane.lookup("#infoDetectorResultCodeArea");
                             CodeArea finalInfoDetectorArgsCodeArea = (CodeArea) anchorPane.lookup("#infoDetectorArgsCodeArea");
+
                             Pattern pattern = Pattern.compile("(?<=^|\\G)[^=]*=(.*)");
                             if (argsUsagePOJO != null) {
                                 for (int i=0; i<argsUsagePOJO.getArgsInfoList().size();i++){
@@ -265,7 +273,6 @@ public class MainController {
                                         args.put(finalArgsInfoPOJO.getName(),matcher.group(1));
                                     }
                                 }
-
                             }
                             try {
                                 targetPOJO.setAddress(Tools.urlParse(infoDetectorTargetAddressTextField.getText()));
@@ -480,6 +487,7 @@ public class MainController {
                             CodeArea vulExpArgsCodeArea = new CodeArea();
                             vulExpArgsCodeArea.setId("vulExpArgsCodeArea");
                             vulExpArgsCodeArea.setWrapText(true);
+                            vulExpArgsCodeArea.setParagraphGraphicFactory(LineNumberFactory.get(vulExpArgsCodeArea));
 
 
                             //取出当前选择表格的参数列表，用于下面设置TextArea的预设Arg值
@@ -511,10 +519,15 @@ public class MainController {
 
                                 vulExpResultTab.setContent(vulExpTabResultAnchorPane);
 
-
-                                for (ArgsInfo argsInfo : vulExpArgsUsagePOJO.getArgsInfoList()) {
+                                int i =0;
+                                for (ArgsInfo argsInfo:vulExpArgsUsagePOJO.getArgsInfoList()){
                                     argsInfoPOJO = (ArgsInfoPOJO) argsInfo;
-                                    vulExpArgsCodeArea.appendText(argsInfoPOJO.getName() + "=\n");
+                                    String line = argsInfoPOJO.getName()+"="+argsInfoPOJO.getDefaultValue();
+                                    if (i< vulExpArgsUsagePOJO.getArgsInfoList().size() -1){
+                                        line += "\n";
+                                    }
+                                    vulExpArgsCodeArea.appendText(line);
+                                    i++;
                                 }
                             }
 

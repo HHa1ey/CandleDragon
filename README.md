@@ -3,7 +3,8 @@
 ## 运行环境
 
 JDK 1.8 
-打包命令：mvn package assembly:single
+
+打包命令：mvn package
 
 ## 工具界面
 
