@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="rootVBox" prefHeight="800.0" prefWidth="1300.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ha1ey.CandleDragon.controller.Controller">
+   <children>
+      <HBox fx:id="functionsHBox" prefHeight="784.0" prefWidth="1400.0">
+         <children>
+            <AnchorPane fx:id="shortcutAchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="873.0" prefWidth="33.0">
+               <children>
+                  <FontAwesomeIconView glyphName="ROCKET" layoutX="6.0" layoutY="250.0" onMouseClicked="#runHome" size="24" />
+                  <FontAwesomeIconView glyphName="STAR" layoutX="6.0" layoutY="300.0" onMouseClicked="#runUtils" size="24" />
+                  <FontAwesomeIconView glyphName="GEARS" layoutX="6.0" layoutY="350.0" onMouseClicked="#runSetting" size="24" />
+                  <FontAwesomeIconView glyphName="GITHUB" layoutX="6.0" layoutY="400.0" onMouseClicked="#runGithub" size="24" />
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+      <GridPane fx:id="tipsGridPane" prefHeight="27.0" prefWidth="1200.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label fx:id="proxyStatusLabel" prefHeight="17.0" prefWidth="630.0" />
+            <Label prefHeight="17.0" prefWidth="616.0" text="Statement: 本软件仅供企业安全人员测试使用，严禁进行非法用途。" GridPane.columnIndex="1" />
+         </children>
+      </GridPane>
+   </children>
+</VBox>

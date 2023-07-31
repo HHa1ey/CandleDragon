@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<JFXTabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="553.0" prefWidth="1260.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ha1ey.CandleDragon.controller.UtilsController">
+   <tabs>
+      <Tab text="AVIdentify">
+         <content>
+            <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+              <items>
+                  <JFXTextArea fx:id="tasklistText" />
+                  <TableView fx:id="avIdentifyTable" prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn fx:id="avIDCol" prefWidth="75.0" text="ID" />
+                      <TableColumn fx:id="avProcessIdCol" prefWidth="208.0" text="Process Name" />
+                        <TableColumn fx:id="avNameCol" prefWidth="242.28570556640625" text="AV Name" />
+                    </columns>
+                  </TableView>
+              </items>
+            </SplitPane>
+         </content>
+      </Tab>
+   </tabs>
+</JFXTabPane>

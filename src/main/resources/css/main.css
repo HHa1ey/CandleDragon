@@ -1,0 +1,136 @@
+/*.root{*/
+/*    -fx-background-color: black;*/
+/*    -fx-text-fill: white;*/
+/*    -fx-border-color: black;*/
+/*}*/
+
+/*.table-view{*/
+/*    -fx-background-color: black;*/
+/*    -fx-border-color: black;*/
+/*}*/
+
+
+/*.list-view{*/
+/*    -fx-background-color: black;*/
+/*    -fx-border-color: black;*/
+/*}*/
+/*.list-cell{*/
+/*    -fx-background-color: black;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+
+/*.list-view .list-cell:selected {*/
+/*    -fx-background-color: green;*/
+/*}*/
+
+/*.list-view .scroll-bar:vertical {*/
+/*    -fx-background-color: #000000;*/
+/*}*/
+
+
+
+
+/*.label{*/
+/*    -fx-background-color: black;*/
+/*    -fx-text-fill: white;*/
+
+/*}*/
+
+
+
+
+
+/* button */
+/*.jfx-button {*/
+/*    -jfx-button-type: RAISED;*/
+/*    -fx-background-color: #109755;*/
+/*    -fx-background-radius:5;*/
+/*    -fx-text-fill:#ffffff;*/
+/*    -fx-border-radius:1;*/
+/*    -fx-border-insets:-5;*/
+/*}*/
+
+/*.jfx-button:hover{*/
+/*    -fx-background-color: #86eeb8;*/
+/*}*/
+
+/*.jfx-button:focused{*/
+/*    -fx-background-color: #025e2c;*/
+/*}*/
+
+
+
+
+
+
+/*!* Tab *!*/
+.tab-label {
+    -fx-text-fill: #000000;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: #000000;
+}
+
+
+.jfx-tab-pane .tab:selected{
+    -fx-background-color: rgba(33, 33, 35, 0.34);
+}
+
+.jfx-tab-pane .tab-selected-line {
+    -fx-background-color: transparent;
+}
+
+.jfx-tab-pane{
+    -fx-background-color: white;
+}
+
+/*.jfx-tab-pane .headers-region {*/
+/*    -fx-background-color: rgba(33, 33, 35, 0.34);*/
+/*}*/
+.jfx-tab-pane .tab-header-background {
+    -fx-background-color: rgba(33, 33, 35, 0.34);
+}
+
+/*Text*/
+.text-area{
+    -fx-background-color:white;
+}
+
+/*.text-field{*/
+/*    -fx-text-fill: white;*/
+/*    -fx-background-color:black;*/
+/*}*/
+
+.code-area{
+    -fx-font-size: 13;
+    -fx-font-family: system;
+}
+
+
+
+/*.titled-pane > .title*/
+/*{*/
+/*    -fx-background-color: rgb(49, 51, 56);*/
+/*    -fx-border-color: rgb(0, 0, 0);*/
+/*}*/
+
+
+/*.titled-pane > .title > .text*/
+/*{*/
+/*    -fx-fill: WHITE;*/
+/*}*/
+
+
+
+/*.split-pane > .split-pane-divider {*/
+/*    -fx-background-color: #04622f;*/
+/*}*/
+
+
+
+
+
+
+
