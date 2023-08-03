@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
@@ -10,79 +12,80 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-           orientation="VERTICAL" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171"
-           xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ha1ey.CandleDragon.controller.SettingController">
-   <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" stylesheets="@../css/main.css">
-      <TitledPane fx:id="proxyTitlePane" animated="false" collapsible="false" maxHeight="1.7976931348623157E308"
-                  maxWidth="1.7976931348623157E308" stylesheets="@../css/main.css" text="Proxy">
-         <AnchorPane fx:id="proxyParamPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                     stylesheets="@../css/main.css">
-            <Text layoutX="126.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP Address:"/>
-            <Text layoutX="144.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Port:"/>
-            <Text layoutX="127.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:"/>
-            <Text layoutX="128.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:"/>
-            <JFXComboBox fx:id="proxyTypeComboBox" layoutX="207.0" layoutY="24.0" prefHeight="25.0"
-                         prefWidth="88.0"/>
-            <JFXTextField fx:id="proxyIPText" layoutX="200.0" layoutY="80.0" prefHeight="25.0"
-                          prefWidth="180.0"/>
-            <JFXTextField fx:id="proxyPortText" layoutX="200.0" layoutY="120.0" prefHeight="25.0"
-                          prefWidth="180.0"/>
-            <JFXTextField fx:id="proxyUsernameText" layoutX="200.0" layoutY="168.0" prefHeight="25.0"
-                          prefWidth="180.0"/>
-            <JFXTextField fx:id="proxyPasswordText" layoutX="200.0" layoutY="213.0" prefHeight="25.0"
-                          prefWidth="180.0"/>
-            <Text layoutX="126.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Proxy Type:"/>
-            <JFXRadioButton fx:id="openRadioButton" layoutX="422.0" layoutY="105.0" text="Open"/>
-            <JFXRadioButton fx:id="closeRadioButton" layoutX="422.0" layoutY="172.0" text="Close"/>
+<SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ha1ey.CandleDragon.controller.SettingController">
+   <SplitPane dividerPositions="0.5, 0.5" maxHeight="1.7976931348623157E308" stylesheets="@../css/main.css">
+      <TitledPane fx:id="proxyTitlePane" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../css/main.css" text="Proxy">
+         <AnchorPane fx:id="proxyParamPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../css/main.css">
+            <Text layoutX="126.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP Address:" />
+            <Text layoutX="144.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Port:" />
+            <Text layoutX="127.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" />
+            <Text layoutX="128.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" />
+            <JFXComboBox fx:id="proxyTypeComboBox" layoutX="207.0" layoutY="24.0" prefHeight="25.0" prefWidth="88.0" />
+            <JFXTextField fx:id="proxyIPText" layoutX="200.0" layoutY="80.0" prefHeight="25.0" prefWidth="180.0" text="127.0.0.1" />
+            <JFXTextField fx:id="proxyPortText" layoutX="200.0" layoutY="120.0" prefHeight="25.0" prefWidth="180.0" text="8080" />
+            <JFXTextField fx:id="proxyUsernameText" layoutX="200.0" layoutY="168.0" prefHeight="25.0" prefWidth="180.0" />
+            <JFXTextField fx:id="proxyPasswordText" layoutX="200.0" layoutY="213.0" prefHeight="25.0" prefWidth="180.0" />
+            <Text layoutX="126.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Proxy Type:" />
+            <JFXCheckBox fx:id="proxySwitch" layoutX="380.0" layoutY="36.0" text="Open" />
          </AnchorPane>
       </TitledPane>
-      <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308"
-                  maxWidth="1.7976931348623157E308" stylesheets="@../css/main.css" text="Charset">
+      <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../css/main.css" text="Charset">
          <content>
             <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
-                  <JFXRadioButton fx:id="utf8RadioButton" layoutX="200.0" layoutY="190.0" text="UTF-8"
-                                  textAlignment="CENTER">
+                  <JFXRadioButton fx:id="utf8RadioButton" layoutX="110.0" layoutY="192.0" text="UTF-8" textAlignment="CENTER">
                      <font>
-                        <Font size="14.0"/>
+                        <Font size="14.0" />
                      </font>
                   </JFXRadioButton>
-                  <JFXRadioButton fx:id="gbkRadioButton" layoutX="200.0" layoutY="25.0" text="GBK"
-                                  textAlignment="CENTER">
+                  <JFXRadioButton fx:id="gbkRadioButton" layoutX="110.0" layoutY="27.0" text="GBK" textAlignment="CENTER">
                      <font>
-                        <Font size="14.0"/>
+                        <Font size="14.0" />
                      </font>
                   </JFXRadioButton>
-                  <JFXRadioButton fx:id="isoRadioButton" layoutX="200.0" layoutY="135.0" text="ISO-8859-1"
-                                  textAlignment="CENTER">
+                  <JFXRadioButton fx:id="isoRadioButton" layoutX="110.0" layoutY="137.0" text="ISO-8859-1" textAlignment="CENTER">
                      <font>
-                        <Font size="14.0"/>
+                        <Font size="14.0" />
                      </font>
                   </JFXRadioButton>
-                  <JFXRadioButton fx:id="usasciiRadioButton" layoutX="200.0" layoutY="73.0" text="US-ASCII">
+                  <JFXRadioButton fx:id="usasciiRadioButton" layoutX="110.0" layoutY="75.0" text="US-ASCII">
                      <font>
-                        <Font size="14.0"/>
+                        <Font size="14.0" />
                      </font>
                   </JFXRadioButton>
                </children>
             </AnchorPane>
          </content>
       </TitledPane>
+      <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="DNSLog">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Text layoutX="45.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Domian:" />
+                  <Text layoutX="50.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Token:" />
+                  <JFXTextField fx:id="dnslogDomainText" layoutX="108.0" layoutY="111.0" prefHeight="25.0" prefWidth="300.0" />
+                  <JFXTextField fx:id="dnslogTokenText" layoutX="108.0" layoutY="151.0" prefHeight="25.0" prefWidth="300.0" />
+                  <JFXButton layoutX="136.0" layoutY="207.0" onAction="#testDNSLog" text="Test DNSLog" />
+                  <JFXTextField fx:id="dnslogRefreshTimeText" layoutX="384.0" layoutY="21.0" prefHeight="25.0" prefWidth="48.0" text="5000" />
+                  <Text layoutX="429.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ms" />
+                  <JFXComboBox fx:id="dnslogComboxBox" layoutX="42.0" layoutY="21.0" prefHeight="25.0" prefWidth="156.0" />
+                  <JFXCheckBox layoutX="237.0" layoutY="24.0" onAction="#autoRefresh" text="Auto refresh results" />
+                  <JFXButton layoutX="237.0" layoutY="207.0" onAction="#getDNSLogResult" text="Get Results" />
+                  <Text layoutX="45.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="API URL:" />
+                  <JFXTextField fx:id="dnslogApiText" layoutX="108.0" layoutY="80.0" prefWidth="300.0" />
+               </children></AnchorPane>
+        </content>
+      </TitledPane>
    </SplitPane>
-   <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" prefHeight="101.0"
-               prefWidth="1260.0" stylesheets="@../css/main.css" text="HTTP Attribute">
+   <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" prefHeight="101.0" prefWidth="1260.0" stylesheets="@../css/main.css" text="HTTP Attribute">
       <content>
-         <SplitPane dividerPositions="0.17687074829931973" maxHeight="1.7976931348623157E308"
-                    maxWidth="1.7976931348623157E308" orientation="VERTICAL" stylesheets="@../css/main.css">
+         <SplitPane dividerPositions="0.17687074829931973" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" stylesheets="@../css/main.css">
             <items>
                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                  <Label layoutX="24.0" layoutY="22.0" text="Timeout:"/>
-                  <JFXTextField fx:id="timeoutText" layoutX="86.0" layoutY="18.0" prefHeight="25.0" prefWidth="95.0"
-                                text="1000"/>
+                  <Label layoutX="24.0" layoutY="22.0" text="Timeout:" />
+                  <JFXTextField fx:id="timeoutText" layoutX="86.0" layoutY="18.0" prefHeight="25.0" prefWidth="95.0" text="1000" />
                </AnchorPane>
-               <TitledPane fx:id="uaTitlePane" animated="false" collapsible="false" maxHeight="1.7976931348623157E308"
-                           maxWidth="1.7976931348623157E308" text="UserAgent"/>
+               <TitledPane fx:id="uaTitlePane" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="UserAgent" />
             </items>
          </SplitPane>
       </content>

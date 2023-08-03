@@ -22,9 +22,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.Paragraph;
@@ -68,27 +65,6 @@ public class HomeController {
     private TableColumn<ResultImpl, String> pocTimeCol;
     @FXML
     private JFXTabPane pocexpTabPane;
-    @FXML
-    private TextFlow infoPluginNameTextFlow;
-    @FXML
-    private TextFlow infoPluginDescriptionTextFlow;
-    @FXML
-    private TextFlow infoPluginVersionTextFlow;
-    @FXML
-    private TextFlow infoAuthorTextFlow;
-    @FXML
-    private TextFlow infoVulNameTextFlow;
-    @FXML
-    private TextFlow infoVulCategoryTextFlow;
-    @FXML
-    private TextFlow infoVulDisclosureTimeTextFlow;
-    @FXML
-    private TextFlow infoVulScopeTextFlow;
-    @FXML
-    private TextFlow infoVulProductTextFlow;
-    @FXML
-    private TextFlow infoVulIdTextFlow;
-
 
 
     private final HashMap<String, Exploit> expMap = new HashMap<>();
@@ -99,29 +75,60 @@ public class HomeController {
     private void initialize() {
         initPlugin();
         initPocPane();
+        initSearchKeywords();
     }
 
 
     //Load Plugin and Display pluginlist
     private void initPlugin() {
         JarLoader.loadJar();
-        ObservableList<PluginImpl> items = FXCollections.observableArrayList();
-        FilteredList<PluginImpl> filteredItems = new FilteredList<>(items);
-        items.addAll(CommonUtils.pluginList);
-        pluginListView.setItems(filteredItems);
+
 
         pluginListView.setCellFactory(param -> new ListCell<PluginImpl>() {
+            private Tooltip tooltip = new Tooltip();
+
             @Override
             protected void updateItem(PluginImpl item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
+                    setTooltip(null);
                 } else {
+                    String pluginInfo = "Plugin Name：" + item.getPluginName() + "\n" +
+                            "Plugin Version：" + item.getPluginVersion() + "\n" +
+                            "Author：" + item.getPluginAuthor() + "\n" +
+                            "Plugin Description：" + item.getDescription() + "\n" +
+                            "Vul Name：" + item.getVulName() + "\n" +
+                            "Vul Id：" + item.getVulId() + "\n" +
+                            "Vul Category：" + item.getVulCategory() + "\n" +
+                            "Vul Disclosure Time：" + item.getVulDisclosureTime() + "\n" +
+                            "Vul Scope：" + item.getVulScope() + "\n" +
+                            "Vul Product：" + item.getProduct();
                     setText(item.getPluginName());
+                    tooltip.setText(pluginInfo);
+                    setOnMouseEntered(event -> {
+                        tooltip.show(this, event.getScreenX() + 10, event.getScreenY() + 10);
+                    });
+
+                    setOnMouseExited(event -> {
+                        tooltip.hide();
+                    });
+
+
                 }
             }
         });
 
+        pluginListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+    }
+
+
+    private void initSearchKeywords() {
+        ObservableList<PluginImpl> items = FXCollections.observableArrayList();
+        FilteredList<PluginImpl> filteredItems = new FilteredList<>(items);
+        items.addAll(CommonUtils.pluginList);
+        pluginListView.setItems(filteredItems);
         pluginKeywordsText.setOnKeyReleased(searchKeywordsEvent -> {
             String filterText = pluginKeywordsText.getText().toLowerCase();
             filteredItems.setPredicate(item ->
@@ -133,11 +140,7 @@ public class HomeController {
                             (filterText.isEmpty() || item.getVulDisclosureTime() != null && item.getVulDisclosureTime().toLowerCase().contains(filterText))
             );
         });
-        pluginListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
     }
-
-
 
 
     //monitor pluginlist
@@ -148,65 +151,6 @@ public class HomeController {
         MenuItem toExploit = new MenuItem("To Exploit");
         contextMenu.getItems().add(toPocScan);
         contextMenu.getItems().add(toExploit);
-
-        if (event.getButton() == MouseButton.PRIMARY){
-            infoPluginNameTextFlow.getChildren().clear();
-            infoAuthorTextFlow.getChildren().clear();
-            infoVulNameTextFlow.getChildren().clear();
-            infoVulCategoryTextFlow.getChildren().clear();
-            infoVulDisclosureTimeTextFlow.getChildren().clear();
-            infoVulScopeTextFlow.getChildren().clear();
-            infoVulProductTextFlow.getChildren().clear();
-            infoVulIdTextFlow.getChildren().clear();
-            infoPluginDescriptionTextFlow.getChildren().clear();
-            infoPluginVersionTextFlow.getChildren().clear();
-
-            PluginImpl plugin = pluginListView.getSelectionModel().getSelectedItem();
-            if (plugin != null){
-                String infoPluginName = plugin.getPluginName();
-                String infoAuthor = plugin.getPluginAuthor();
-                String infoVulName = plugin.getVulName();
-                String infoVulCategory = plugin.getVulCategory();
-                String infoVulDisclosureTime = plugin.getVulDisclosureTime();
-                String infoVulScope = plugin.getVulScope();
-                String infoVulProduct = plugin.getProduct();
-                String infoVulId = plugin.getVulId();
-                String infoPluginDescription = plugin.getDescription();
-                String infoPluginVersion = plugin.getPluginVersion();
-
-                Text infoPluginNameText = new Text(infoPluginName);
-                infoPluginNameText.setFill(Color.RED);
-                infoPluginNameTextFlow.getChildren().add(infoPluginNameText);
-                Text infoAuthorText = new Text(infoAuthor);
-                infoAuthorText.setFill(Color.RED);
-                infoAuthorTextFlow.getChildren().add(infoAuthorText);
-                Text infoVulNameText = new Text(infoVulName);
-                infoVulNameText.setFill(Color.RED);
-                infoVulNameTextFlow.getChildren().add(infoVulNameText);
-                Text infoVulCategoryText = new Text(infoVulCategory);
-                infoVulCategoryText.setFill(Color.RED);
-                infoVulCategoryTextFlow.getChildren().add(infoVulCategoryText);
-                Text infoVulDisclosureTimeText = new Text(infoVulDisclosureTime);
-                infoVulDisclosureTimeText.setFill(Color.RED);
-                infoVulDisclosureTimeTextFlow.getChildren().add(infoVulDisclosureTimeText);
-                Text infoVulScopeText = new Text(infoVulScope);
-                infoVulScopeText.setFill(Color.RED);
-                infoVulScopeTextFlow.getChildren().add(infoVulScopeText);
-                Text infoVulProductText = new Text(infoVulProduct);
-                infoVulProductText.setFill(Color.RED);
-                infoVulProductTextFlow.getChildren().add(infoVulProductText);
-                Text infoVulIdText = new Text(infoVulId);
-                infoVulIdText.setFill(Color.RED);
-                infoVulIdTextFlow.getChildren().add(infoVulIdText);
-                Text infoPluginDescriptionText = new Text(infoPluginDescription);
-                infoPluginDescriptionText.setFill(Color.RED);
-                infoPluginDescriptionTextFlow.getChildren().add(infoPluginDescriptionText);
-                Text infoPluginVersionText = new Text(infoPluginVersion);
-                infoPluginVersionText.setFill(Color.RED);
-                infoPluginVersionTextFlow.getChildren().add(infoPluginVersionText);
-
-            }
-        }
 
         if (event.getButton() == MouseButton.SECONDARY && pluginListView.getSelectionModel().getSelectedItems().size() > 1) {
             toExploit.setDisable(true);
@@ -262,9 +206,9 @@ public class HomeController {
                     for (int i = 0; i < argsInfoList.size(); i++) {
                         ArgsInfoImpl args = (ArgsInfoImpl) argsInfoList.get(i);
                         String argsName = args.getArgsName();
-                        if (!args.getDefaultValue().isEmpty()){
-                            argsCodeArea.appendText(argsName + "="+args.getDefaultValue());
-                        }else {
+                        if (!args.getDefaultValue().isEmpty()) {
+                            argsCodeArea.appendText(argsName + "=" + args.getDefaultValue());
+                        } else {
                             argsCodeArea.appendText(argsName + "=");
                         }
 
@@ -341,7 +285,7 @@ public class HomeController {
             if (cell != null) {
                 contextMenu.show(cell, event.getScreenX(), event.getScreenY());
             }
-        }else if (event.getClickCount() == 2 && !scanPocList.getSelectionModel().getSelectedItems().isEmpty()){
+        } else if (event.getClickCount() == 2 && !scanPocList.getSelectionModel().getSelectedItems().isEmpty()) {
             List<PluginImpl> list = new ArrayList<>(scanPocList.getSelectionModel().getSelectedItems());
             scanPocList.getItems().removeAll(list);
         }
@@ -356,11 +300,11 @@ public class HomeController {
     //runPoc
     @FXML
     private void startPoc() {
-        if (pocTargetAddressTextArea.getText().isEmpty()){
+        if (pocTargetAddressTextArea.getText().isEmpty()) {
             CommonUtils.alert("Please input url");
             return;
         }
-        if (scanPocList.getItems().isEmpty()){
+        if (scanPocList.getItems().isEmpty()) {
             CommonUtils.alert("Please select plugin");
             return;
         }
@@ -378,6 +322,7 @@ public class HomeController {
                     targetInfo.setUserAgent(settingController.getUserAgent());
                     targetInfo.setTimeout(settingController.getTimeout());
                     targetInfo.setCharset(settingController.getCharset());
+                    targetInfo.setDnslog(settingController.getDNSLog());
                     ResultImpl result = new ResultImpl();
                     if (proxyStatus) {
                         String proxyIP = settingController.getProxyIP();
@@ -433,11 +378,11 @@ public class HomeController {
     //runExploit
     @FXML
     private void startExploit() {
-        if (exploitTargetAddressText.getText().isEmpty()){
+        if (exploitTargetAddressText.getText().isEmpty()) {
             CommonUtils.alert("Please input url");
             return;
         }
-        if (exploitTabPane.getSelectionModel().isEmpty()){
+        if (exploitTabPane.getSelectionModel().isEmpty()) {
             CommonUtils.alert("Please select plugin");
             return;
         }
@@ -453,11 +398,12 @@ public class HomeController {
         targetInfo.setUserAgent(settingController.getUserAgent());
         targetInfo.setTimeout(settingController.getTimeout());
         targetInfo.setCharset(settingController.getCharset());
+        targetInfo.setDnslog(settingController.getDNSLog());
         SplitPane splitPane = (SplitPane) Controller.components.get(String.valueOf(exploit));
         List<ArgsInfo> argsInfoList = exploit.setArgs(new HelpPluginImpl());
-        if (argsInfoList != null){
+        if (argsInfoList != null) {
             List<String> argsNames = new ArrayList<>();
-            for (ArgsInfo argsInfo : argsInfoList){
+            for (ArgsInfo argsInfo : argsInfoList) {
                 ArgsInfoImpl args = (ArgsInfoImpl) argsInfo;
                 String argsName = args.getArgsName();
                 argsNames.add(argsName);
@@ -466,19 +412,19 @@ public class HomeController {
             LiveList<Paragraph<Collection<String>, String, Collection<String>>> lines = argsCodeArea.getParagraphs();
             String key = null;
             String value = null;
-            for (Paragraph<Collection<String>, String, Collection<String>> line : lines){
+            for (Paragraph<Collection<String>, String, Collection<String>> line : lines) {
                 Pattern keyPattern = Pattern.compile("^[^=]*");
                 Matcher keyMatcher = keyPattern.matcher(line.getText());
-                if (keyMatcher.find()){
+                if (keyMatcher.find()) {
                     key = keyMatcher.group();
                 }
                 Pattern valuePattern = Pattern.compile("(?<=\\=)(.*)");
                 Matcher valueMatcher = valuePattern.matcher(line.getText());
-                if (valueMatcher.find()){
+                if (valueMatcher.find()) {
                     value = valueMatcher.group();
                 }
-                if (argsNames.contains(key)){
-                    argsMap.put(key,value);
+                if (argsNames.contains(key)) {
+                    argsMap.put(key, value);
                 }
             }
         }
@@ -494,19 +440,19 @@ public class HomeController {
             String proxyType = settingController.getProxyType();
             Exploit proxyObj;
             if (!proxyUsername.isEmpty() && !proxyPassword.isEmpty()) {
-                proxyObj = (Exploit)Proxy.newProxyInstance(exploit.getClass().getClassLoader(), new Class[]{Exploit.class}, new ProxyHandler(exploit, proxyIP, proxyPort, proxyUsername, proxyPassword, proxyType));
+                proxyObj = (Exploit) Proxy.newProxyInstance(exploit.getClass().getClassLoader(), new Class[]{Exploit.class}, new ProxyHandler(exploit, proxyIP, proxyPort, proxyUsername, proxyPassword, proxyType));
             } else {
-                proxyObj = (Exploit)Proxy.newProxyInstance(exploit.getClass().getClassLoader(), new Class[]{Exploit.class}, new ProxyHandler(exploit, proxyIP, proxyPort, proxyType));
+                proxyObj = (Exploit) Proxy.newProxyInstance(exploit.getClass().getClassLoader(), new Class[]{Exploit.class}, new ProxyHandler(exploit, proxyIP, proxyPort, proxyType));
                 proxyObj.doExploit(targetInfo, argsMap, result);
             }
-        }else {
+        } else {
             exploit.doExploit(targetInfo, argsMap, result);
         }
 
         //result
         TitledPane resultTilePane = (TitledPane) splitPane.lookup("#resultTitlePane");
         JFXTextArea exploitResutlText = (JFXTextArea) resultTilePane.lookup("#exploitResutlText");
-        exploitResutlText.appendText("【»»»»】" + exploit.setExploitTitle()+ "\tis Started\n\n");
+        exploitResutlText.appendText("【»»»»】" + exploit.setExploitTitle() + "\tis Started\n\n");
         if (!result.getInfo().isEmpty()) {
             exploitResutlText.appendText(String.join("\n", result.getInfo()) + "\n");
         }

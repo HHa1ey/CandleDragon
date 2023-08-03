@@ -30,8 +30,10 @@ public class Controller {
         ComponentUtil.addComponent("home", "fxml/Home.fxml", components, controllers);
         ComponentUtil.addComponent("setting", "fxml/Setting.fxml", components, controllers);
         ComponentUtil.addComponent("utils","fxml/Utils.fxml",components,controllers);
+        ComponentUtil.addComponent("debug","fxml/DeBug.fxml",components,controllers);
         controllers.put("control",this);
         proxyStatusLabel.setText("ProxyStatus: \tClose");
+        runHome();
     }
 
 
@@ -80,6 +82,18 @@ public class Controller {
         }
         functionsHBox.getChildren().add(1, utilsTabPane);
     }
+
+
+    @FXML
+    private void runBug(){
+        JFXTabPane debugTabPane = (JFXTabPane) components.get("debug");
+        HBox functionsHBox = (HBox) rootVBox.lookup("#functionsHBox");
+        if (functionsHBox.getChildren().size() > 1) {
+            functionsHBox.getChildren().remove(1);
+        }
+        functionsHBox.getChildren().add(1, debugTabPane);
+    }
+
 
     @FXML
     private void runGithub() {

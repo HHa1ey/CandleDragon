@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<JFXTabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="802.0" prefWidth="1260.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ha1ey.CandleDragon.controller.DebugController">
+   <Tab text="DNSLog">
+      <content>
+         <TableView fx:id="dnslogResultTable" prefHeight="200.0" prefWidth="200.0">
+           <columns>
+             <TableColumn fx:id="dnslogResultIDCol" prefWidth="75.0" text="ID" />
+             <TableColumn fx:id="dnslogDomainCol" prefWidth="380.4285888671875" text="Domain Name" />
+               <TableColumn fx:id="dnslogReqIPCol" prefWidth="356.5714111328125" text="Request IP Address" />
+               <TableColumn fx:id="dnslogCreateTimeCol" prefWidth="183.5714111328125" text="Create Time" />
+           </columns>
+         </TableView>
+      </content>
+   </Tab>
+</JFXTabPane>

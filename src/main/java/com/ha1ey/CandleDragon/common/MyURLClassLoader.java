@@ -28,7 +28,6 @@ public class MyURLClassLoader extends ClassLoader{
             Method method = this.classLoader.getClass().getDeclaredMethod("findClass", String.class);
             method.setAccessible(true);
             clazz = (Class<?>) method.invoke(classLoader,className);
-
         }catch (Exception e){
             e.printStackTrace();
         }

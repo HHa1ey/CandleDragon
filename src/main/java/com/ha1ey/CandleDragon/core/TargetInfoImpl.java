@@ -7,8 +7,11 @@ public class TargetInfoImpl implements TargetInfo {
     private String userAgent;
     private int timeout;
     private String charset;
+    private String dnslog;
 
-
+    public void setDnslog(String dnslog){
+        this.dnslog = dnslog;
+    }
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
     }
@@ -42,5 +45,10 @@ public class TargetInfoImpl implements TargetInfo {
     @Override
     public String getCharset() {
         return this.charset;
+    }
+
+    @Override
+    public String getDNSLog() {
+        return this.dnslog;
     }
 }

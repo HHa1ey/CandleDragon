@@ -10,9 +10,9 @@ JDK 1.8
 
 左边会初始化显示所有的插件名字，可以根据列表上方的输入框根据：`插件名字`  `插件作者`  `CNVD/CVE编号` `漏洞厂商` `漏洞名字`  `披露时间` 关键字进行筛选。
 
-选中某个插件，最右侧会显示插件的信息
+鼠标放置某个插件上面会以悬浮框的形式显示插件的信息
 
-![image-20230731111813862](./README.assets/image-20230731111813862.png)
+![image-20230802203025943](./README.assets/image-20230802203025943.png)
 
 批量选中多个插件右键可以发送到`POC`页面进行扫描，批量选中不可使用EXP，必须单个选中。
 
@@ -59,6 +59,16 @@ POC可以批量扫描多个插件和多个URL，扫描结果会输出在右边�
 自定义User-Agent头，默认使用这些随机的User-Agent头，插件中使用`TargetInfo#getUserAgent()`方法获取软件设置的自定义UserAgent头
 
 ![image-20230731112456584](./README.assets/image-20230731112456584.png)
+
+### DNSLog
+
+可以配合Poc插件定制需要DNSLog的场景。
+
+![image-20230802203123576](./README.assets/image-20230802203123576.png)
+
+DNSLog的结果在这里显示
+
+![image-20230802203333237](./README.assets/image-20230802203333237.png)
 
 
 
@@ -113,7 +123,7 @@ public class PluginDemo implements IPlugin {
         pluginInfo.setVulDisclosureTime("披露时间");
         pluginInfo.setVulScope("漏洞适应版本");
 
-        List<Exploit> exploits = new ArrayList<>();     //新建一个用来存放exp的list
+        List<Exploit> exploits = new ArrayList<>();     //新建一个用来存放exp的list,如果没有编写EXP可以不用创建EXP列表
         exploits.add(new EXPDEMO());        //有几个exp就添加几个
 //        exploits.add(new EXPDEMO1());
 //        exploits.add(new EXPDEMO2());
@@ -121,7 +131,7 @@ public class PluginDemo implements IPlugin {
 
         pluginInfo.addPoc(new POCDEMO());   //添加这个插件的检测POC
 
-        pluginInfo.addExploit(exploits);    //最后将所有的exp列表添加到插件信息
+        pluginInfo.addExploit(exploits);    //最后将所有的exp列表添加到插件信息，如果没有写EXP可以不用调用此方法
     }
 }
 ```

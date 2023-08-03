@@ -18,7 +18,9 @@
                   <FontAwesomeIconView glyphName="ROCKET" layoutX="6.0" layoutY="250.0" onMouseClicked="#runHome" size="24" />
                   <FontAwesomeIconView glyphName="STAR" layoutX="6.0" layoutY="300.0" onMouseClicked="#runUtils" size="24" />
                   <FontAwesomeIconView glyphName="GEARS" layoutX="6.0" layoutY="350.0" onMouseClicked="#runSetting" size="24" />
-                  <FontAwesomeIconView glyphName="GITHUB" layoutX="6.0" layoutY="400.0" onMouseClicked="#runGithub" size="24" />
+                  <FontAwesomeIconView glyphName="BUG" layoutX="6.0" layoutY="400.0" onMouseClicked="#runBug" size="24" />
+                  <FontAwesomeIconView glyphName="GITHUB" layoutX="6.0" layoutY="450.0" onMouseClicked="#runGithub" size="24" />
+
                </children>
             </AnchorPane>
          </children>

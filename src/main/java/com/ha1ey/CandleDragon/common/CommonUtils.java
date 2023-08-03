@@ -9,7 +9,7 @@ import java.util.*;
 
 public class CommonUtils {
 
-    public static List<PluginImpl> pluginList = new ArrayList<>();
+    public static List<PluginImpl> pluginList = new LinkedList<>();
 
     //判断URL书写规范自动添加http
     public static String urlParse(String url){
@@ -48,4 +48,5 @@ public class CommonUtils {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return simpleDateFormat.format(now);
     }
+
 }
