@@ -8,35 +8,27 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<VBox fx:id="rootVBox" prefHeight="800.0" prefWidth="1300.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ha1ey.CandleDragon.controller.Controller">
-   <children>
-      <HBox fx:id="functionsHBox" prefHeight="784.0" prefWidth="1400.0" VBox.vgrow="ALWAYS">
-         <children>
-            <AnchorPane fx:id="shortcutAchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="873.0" prefWidth="33.0">
-               <children>
-                  <FontIcon fill="black" iconLiteral="fa-crosshairs" iconSize="24" layoutX="6.0" layoutY="250.0" onMouseClicked="#runHome" />
-                  <FontIcon fill="black" iconLiteral="fa-briefcase" iconSize="24" layoutX="6.0" layoutY="300.0" onMouseClicked="#runUtils" />
-                  <FontIcon fill="black" iconLiteral="fa-gears" iconSize="24" layoutX="6.0" layoutY="350.0" onMouseClicked="#runSetting" />
-                  <FontIcon fill="black" iconLiteral="fa-bug" iconSize="24" layoutX="6.0" layoutY="400.0" onMouseClicked="#runBug" />
-                  <FontIcon fill="black" iconLiteral="fa-github" iconSize="24" layoutX="6.0" layoutY="450.0" onMouseClicked="#runGithub" />
-
-               </children>
-            </AnchorPane>
-         </children>
-      </HBox>
-      <GridPane fx:id="tipsGridPane" prefHeight="27.0" prefWidth="1200.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-         </rowConstraints>
-         <children>
-            <Label fx:id="proxyStatusLabel" prefHeight="17.0" prefWidth="630.0" />
-            <Label prefHeight="17.0" prefWidth="616.0" text="Statement: 本软件仅供企业安全人员测试使用，严禁进行非法用途。" GridPane.columnIndex="1" />
-         </children>
-      </GridPane>
-   </children>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<VBox prefHeight="800.0" prefWidth="1300.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ha1ey.CandleDragon.controller.Controller">
+   <HBox fx:id="functionsHBox" prefHeight="784.0" prefWidth="1400.0" VBox.vgrow="ALWAYS">
+      <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="873.0"
+                  prefWidth="33.0">
+         <FontAwesomeIconView glyphName="ROCKET" layoutX="6.0" layoutY="250.0" onMouseClicked="#runHome" size="24" />
+         <FontAwesomeIconView glyphName="WRENCH" layoutX="6.0" layoutY="300.0" onMouseClicked="#runUtils" size="24" />
+         <FontAwesomeIconView glyphName="GEARS" layoutX="6.0" layoutY="350.0" onMouseClicked="#runSetting" size="24" />
+         <FontAwesomeIconView glyphName="BUG" layoutX="6.0" layoutY="400.0" onMouseClicked="#runBug" size="24" />
+         <FontAwesomeIconView glyphName="GITHUB" layoutX="6.0" layoutY="450.0" onMouseClicked="#runGithub" size="24" />
+      </AnchorPane>
+   </HBox>
+   <GridPane prefHeight="27.0" prefWidth="1200.0">
+      <columnConstraints>
+         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+      <Label fx:id="proxyStatusLabel" prefHeight="17.0" prefWidth="630.0" />
+      <Label prefHeight="17.0" prefWidth="616.0" text="Statement: 本软件仅供企业安全人员测试使用，严禁进行非法用途。" GridPane.columnIndex="1" />
+   </GridPane>
 </VBox>

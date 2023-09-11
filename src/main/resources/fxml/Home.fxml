@@ -14,12 +14,12 @@
 <?import javafx.scene.layout.VBox?>
 
 <HBox fx:id="mainHBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="873.0" prefWidth="1260.0" stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ha1ey.CandleDragon.controller.HomeController">
-   <VBox fx:id="pluginVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="873.0" prefWidth="267.0">
-      <Label text="Search Keywords:" />
-      <JFXTextField fx:id="pluginKeywordsText" focusColor="#1a742e" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" unFocusColor="BLACK" />
-      <JFXListView fx:id="pluginListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#monitorPluginList" prefHeight="883.0" prefWidth="167.0" />
+   <VBox fx:id="pluginVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="873.0" prefWidth="267.0" HBox.hgrow="ALWAYS">
+      <Label text="Search Keywords:" VBox.vgrow="ALWAYS" />
+      <JFXTextField fx:id="pluginKeywordsText" focusColor="#1a742e" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" unFocusColor="BLACK" VBox.vgrow="ALWAYS" />
+      <JFXListView fx:id="pluginListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#monitorPluginList" prefHeight="883.0" prefWidth="167.0" VBox.vgrow="ALWAYS" />
    </VBox>
-   <JFXTabPane fx:id="pocexpTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="873.0" prefWidth="998.0">
+   <JFXTabPane fx:id="pocexpTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="873.0" prefWidth="998.0" HBox.hgrow="ALWAYS">
       <Tab closable="false" text="Poc">
          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
             <JFXButton onAction="#startPoc" prefHeight="25.0" prefWidth="932.0" text="Scan" />

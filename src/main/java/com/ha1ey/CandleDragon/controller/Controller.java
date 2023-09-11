@@ -13,9 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.awt.*;
 import java.net.URI;
@@ -24,7 +22,7 @@ import java.util.HashMap;
 
 public class Controller {
     @FXML
-    private VBox rootVBox;
+    private HBox functionsHBox;
     @FXML
     private Label proxyStatusLabel;
 
@@ -57,7 +55,6 @@ public class Controller {
     @FXML
     private void runHome() {
         HBox mainHBox = (HBox) components.get("home");
-        HBox functionsHBox = (HBox) rootVBox.lookup("#functionsHBox");
         if (functionsHBox.getChildren().size() > 1) {
             functionsHBox.getChildren().remove(1);
         }
@@ -70,13 +67,11 @@ public class Controller {
     @FXML
     private void runSetting() {
         SplitPane settingSplitPane = (SplitPane) components.get("setting");
-        HBox functionsHBox = (HBox) rootVBox.lookup("#functionsHBox");
         if (functionsHBox.getChildren().size() > 1) {
             functionsHBox.getChildren().remove(1);
         }
         functionsHBox.getChildren().add(1, settingSplitPane);
         functionsHBox.setHgrow(settingSplitPane, Priority.ALWAYS);
-
     }
 
 
@@ -108,7 +103,6 @@ public class Controller {
         }
 
 
-        HBox functionsHBox = (HBox) rootVBox.lookup("#functionsHBox");
         if (functionsHBox.getChildren().size() > 1) {
             functionsHBox.getChildren().remove(1);
         }
@@ -120,7 +114,6 @@ public class Controller {
     @FXML
     private void runBug() {
         JFXTabPane debugTabPane = (JFXTabPane) components.get("debug");
-        HBox functionsHBox = (HBox) rootVBox.lookup("#functionsHBox");
         if (functionsHBox.getChildren().size() > 1) {
             functionsHBox.getChildren().remove(1);
         }
