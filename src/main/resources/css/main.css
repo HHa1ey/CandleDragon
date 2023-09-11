@@ -67,10 +67,12 @@
 /*!* Tab *!*/
 .tab-label {
     -fx-text-fill: #000000;
+    -fx-font-size: 12;
 }
 
 .tab:selected .tab-label {
     -fx-text-fill: #000000;
+    -fx-font-size: 12;
 }
 
 
@@ -102,11 +104,6 @@
 /*    -fx-text-fill: white;*/
 /*    -fx-background-color:black;*/
 /*}*/
-
-.code-area{
-    -fx-font-size: 13;
-    -fx-font-family: system;
-}
 
 
 

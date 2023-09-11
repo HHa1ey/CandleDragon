@@ -22,11 +22,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.Paragraph;
 import org.reactfx.collection.LiveList;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -42,8 +45,6 @@ public class HomeController {
     private JFXTextField pluginKeywordsText;
     @FXML
     private JFXTextField exploitTargetAddressText;
-    @FXML
-    private JFXTextArea pocResultText;
     @FXML
     private JFXTabPane exploitTabPane;
     @FXML
@@ -65,14 +66,20 @@ public class HomeController {
     private TableColumn<ResultImpl, String> pocTimeCol;
     @FXML
     private JFXTabPane pocexpTabPane;
+    @FXML
+    private SplitPane pocResultSplitPane;
 
 
+    private CodeArea pocResultText;
+    private CodeArea exploitResutlText;
     private final HashMap<String, Exploit> expMap = new HashMap<>();
+    Font defaultFont = Font.getDefault();
 
 
     //init
     @FXML
     private void initialize() {
+
         initPlugin();
         initPocPane();
         initSearchKeywords();
@@ -190,19 +197,67 @@ public class HomeController {
                 expTab.setId(String.valueOf(exploit));
                 expMap.put(String.valueOf(exploit), exploit);
                 exploitTabPane.getTabs().add(expTab);
+                exploitTabPane.getSelectionModel().select(expTab);
                 HelpPluginImpl helpPlugin = new HelpPluginImpl();
                 List<ArgsInfo> argsInfoList = exploit.setArgs(helpPlugin);
                 if (argsInfoList == null) {
                     SplitPane splitPane = (SplitPane) ComponentUtil.loadComponent(String.valueOf(exploit), "fxml/Exploit/Exploit.fxml", Controller.components);
+                    TitledPane resultTitledPane = (TitledPane) splitPane.getItems().get(0);
+                    exploitResutlText = new CodeArea();
+                    exploitResutlText.setStyle("-fx-font-size: " + defaultFont.getSize() + "px; -fx-font-family: " + defaultFont.getFamily() + ";");
+                    exploitResutlText.setWrapText(true);
+                    try {
+                        Method initInfoMethod = exploit.getClass().getMethod("initInfo");
+                        if (initInfoMethod != null) {
+                            Object result = initInfoMethod.invoke(exploit);
+                            if (result == null) {
+                                exploitResutlText.appendText("Default Information is Null");
+                            } else {
+                                exploitResutlText.appendText("【#INFO#】\n" + result + "\n---------------------------------------------------------------------------------------------------------\n\n");
+                            }
+                        }
+                    } catch (InvocationTargetException e) {
+                        exploitResutlText.appendText("Method 'initInfo' does not exist.未编写初始化信息");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    resultTitledPane.setContent(exploitResutlText);
                     expTab.setContent(splitPane);
                 } else {
                     SplitPane splitPane = (SplitPane) ComponentUtil.loadComponent(String.valueOf(exploit), "fxml/Exploit/Args_Exploit.fxml", Controller.components);
                     TitledPane argsTilePane = (TitledPane) splitPane.getItems().get(0);
+                    exploitResutlText = new CodeArea();
+                    exploitResutlText.setStyle("-fx-font-size: " + defaultFont.getSize() + "px; -fx-font-family: " + defaultFont.getFamily() + ";");
+                    exploitResutlText.setWrapText(true);
+
+                    try {
+                        Method initInfoMethod = exploit.getClass().getMethod("initInfo");
+                        if (initInfoMethod != null) {
+                            Object result = initInfoMethod.invoke(exploit);
+                            if (result == null) {
+                                exploitResutlText.appendText("Default Information is Null");
+                            } else {
+                                exploitResutlText.appendText("【#INFO#】\n" + result + "\n---------------------------------------------------------------------------------------------------------\n\n");
+                            }
+                        }
+                    } catch (InvocationTargetException e) {
+                        exploitResutlText.appendText("Method 'initInfo' does not exist.未编写初始化信息");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    TitledPane resultTitledPane = (TitledPane) splitPane.getItems().get(1);
+                    resultTitledPane.setContent(exploitResutlText);
                     CodeArea argsCodeArea = new CodeArea();
+                    argsCodeArea.setStyle("-fx-font-size: " + defaultFont.getSize() + "px; -fx-font-family: " + defaultFont.getFamily() + ";");
                     argsCodeArea.setWrapText(true);
                     argsCodeArea.setId("argsCodeArea");
                     argsCodeArea.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("css/main.css")).toExternalForm());
                     argsCodeArea.setParagraphGraphicFactory(LineNumberFactory.get(argsCodeArea));
+
+                    Tooltip argsDescTip = new Tooltip();
+                    Tooltip.install(argsCodeArea, argsDescTip);
+                    StringBuilder stringBuilder = new StringBuilder();
                     for (int i = 0; i < argsInfoList.size(); i++) {
                         ArgsInfoImpl args = (ArgsInfoImpl) argsInfoList.get(i);
                         String argsName = args.getArgsName();
@@ -211,11 +266,23 @@ public class HomeController {
                         } else {
                             argsCodeArea.appendText(argsName + "=");
                         }
+                        if (args.getDescription() != null) {
+                            stringBuilder.append(args.getArgsName()).append("\t//").append(args.getDescription()).append(System.getProperty("line.separator"));
+                        }
 
                         if (i < argsInfoList.size() - 1) {
                             argsCodeArea.appendText(System.getProperty("line.separator"));
                         }
                     }
+                    argsDescTip.setText(stringBuilder.toString());
+                    argsCodeArea.setOnMouseMoved(event1 -> {
+                        argsDescTip.show(argsCodeArea, event1.getScreenX() + 10, event1.getScreenY() + 10);
+                    });
+                    argsCodeArea.setOnMouseExited(event1 -> {
+                        argsDescTip.hide();
+                    });
+
+
                     argsTilePane.setContent(argsCodeArea);
                     expTab.setContent(splitPane);
                 }
@@ -250,11 +317,19 @@ public class HomeController {
         });
 
         pocTargetAddressTextArea = new CodeArea();
+        pocTargetAddressTextArea.setStyle("-fx-font-size: " + defaultFont.getSize() + "px; -fx-font-family: " + defaultFont.getFamily() + ";");
         pocTargetAddressTextArea.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("css/main.css")).toExternalForm());
         pocTargetAddressTextArea.setWrapText(true);
         pocTargetAddressTextArea.setId("pocTargetAddressTextArea");
         pocTargetAddressTextArea.setParagraphGraphicFactory(LineNumberFactory.get(pocTargetAddressTextArea));
         targetInfoSplitPane.getItems().add(0, pocTargetAddressTextArea);
+
+
+        pocResultText = new CodeArea();
+        pocResultText.setStyle("-fx-font-size: " + defaultFont.getSize() + "px; -fx-font-family: " + defaultFont.getFamily() + ";");
+        pocResultText.setWrapText(true);
+        pocResultText.setId("pocResultText");
+        pocResultSplitPane.getItems().add(1, pocResultText);
 
 
         pocResPluginNameCol.setCellValueFactory(new PropertyValueFactory<>("PluginName"));

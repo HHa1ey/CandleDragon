@@ -7,6 +7,7 @@ import java.util.List;
 
 public class PluginImpl implements PluginInfo {
 
+
     private String pluginName;
     private String pluginVersion;
     private String pluginAuthor;
@@ -69,10 +70,6 @@ public class PluginImpl implements PluginInfo {
     public Poc getPoc() {
         return poc;
     }
-
-
-
-
 
 
 

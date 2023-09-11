@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -9,17 +8,18 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <VBox fx:id="rootVBox" prefHeight="800.0" prefWidth="1300.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ha1ey.CandleDragon.controller.Controller">
    <children>
-      <HBox fx:id="functionsHBox" prefHeight="784.0" prefWidth="1400.0">
+      <HBox fx:id="functionsHBox" prefHeight="784.0" prefWidth="1400.0" VBox.vgrow="ALWAYS">
          <children>
             <AnchorPane fx:id="shortcutAchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="873.0" prefWidth="33.0">
                <children>
-                  <FontAwesomeIconView glyphName="ROCKET" layoutX="6.0" layoutY="250.0" onMouseClicked="#runHome" size="24" />
-                  <FontAwesomeIconView glyphName="STAR" layoutX="6.0" layoutY="300.0" onMouseClicked="#runUtils" size="24" />
-                  <FontAwesomeIconView glyphName="GEARS" layoutX="6.0" layoutY="350.0" onMouseClicked="#runSetting" size="24" />
-                  <FontAwesomeIconView glyphName="BUG" layoutX="6.0" layoutY="400.0" onMouseClicked="#runBug" size="24" />
-                  <FontAwesomeIconView glyphName="GITHUB" layoutX="6.0" layoutY="450.0" onMouseClicked="#runGithub" size="24" />
+                  <FontIcon fill="black" iconLiteral="fa-crosshairs" iconSize="24" layoutX="6.0" layoutY="250.0" onMouseClicked="#runHome" />
+                  <FontIcon fill="black" iconLiteral="fa-briefcase" iconSize="24" layoutX="6.0" layoutY="300.0" onMouseClicked="#runUtils" />
+                  <FontIcon fill="black" iconLiteral="fa-gears" iconSize="24" layoutX="6.0" layoutY="350.0" onMouseClicked="#runSetting" />
+                  <FontIcon fill="black" iconLiteral="fa-bug" iconSize="24" layoutX="6.0" layoutY="400.0" onMouseClicked="#runBug" />
+                  <FontIcon fill="black" iconLiteral="fa-github" iconSize="24" layoutX="6.0" layoutY="450.0" onMouseClicked="#runGithub" />
 
                </children>
             </AnchorPane>
