@@ -31,11 +31,14 @@ import org.reactfx.collection.LiveList;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.ha1ey.CandleDragon.common.CommonUtils.pluginList;
 
 
 public class HomeController {
@@ -67,11 +70,10 @@ public class HomeController {
     @FXML
     private JFXTabPane pocexpTabPane;
     @FXML
-    private SplitPane pocResultSplitPane;
+    private JFXTextArea pocResultText;
 
 
-    private CodeArea pocResultText;
-    private CodeArea exploitResutlText;
+    private JFXTextArea exploitResutlText;
     private final HashMap<String, Exploit> expMap = new HashMap<>();
     Font defaultFont = Font.getDefault();
 
@@ -79,7 +81,6 @@ public class HomeController {
     //init
     @FXML
     private void initialize() {
-
         initPlugin();
         initPocPane();
         initSearchKeywords();
@@ -87,10 +88,9 @@ public class HomeController {
 
 
     //Load Plugin and Display pluginlist
-    private void initPlugin() {
+    public void initPlugin() {
         JarLoader.loadJar();
-
-
+        pluginListView.setItems(CommonUtils.pluginList);
         pluginListView.setCellFactory(param -> new ListCell<PluginImpl>() {
             private Tooltip tooltip = new Tooltip();
 
@@ -134,7 +134,7 @@ public class HomeController {
     private void initSearchKeywords() {
         ObservableList<PluginImpl> items = FXCollections.observableArrayList();
         FilteredList<PluginImpl> filteredItems = new FilteredList<>(items);
-        items.addAll(CommonUtils.pluginList);
+        items.addAll(pluginList);
         pluginListView.setItems(filteredItems);
         pluginKeywordsText.setOnKeyReleased(searchKeywordsEvent -> {
             String filterText = pluginKeywordsText.getText().toLowerCase();
@@ -158,7 +158,6 @@ public class HomeController {
         MenuItem toExploit = new MenuItem("To Exploit");
         contextMenu.getItems().add(toPocScan);
         contextMenu.getItems().add(toExploit);
-
         if (event.getButton() == MouseButton.SECONDARY && pluginListView.getSelectionModel().getSelectedItems().size() > 1) {
             toExploit.setDisable(true);
             ListCell<PluginImpl> cell = getClickedCell(event);
@@ -203,51 +202,47 @@ public class HomeController {
                 if (argsInfoList == null) {
                     SplitPane splitPane = (SplitPane) ComponentUtil.loadComponent(String.valueOf(exploit), "fxml/Exploit/Exploit.fxml", Controller.components);
                     TitledPane resultTitledPane = (TitledPane) splitPane.getItems().get(0);
-                    exploitResutlText = new CodeArea();
-                    exploitResutlText.setStyle("-fx-font-size: " + defaultFont.getSize() + "px; -fx-font-family: " + defaultFont.getFamily() + ";");
-                    exploitResutlText.setWrapText(true);
+                    exploitResutlText = (JFXTextArea) resultTitledPane.getContent();
+
                     try {
                         Method initInfoMethod = exploit.getClass().getMethod("initInfo");
                         if (initInfoMethod != null) {
                             Object result = initInfoMethod.invoke(exploit);
                             if (result == null) {
-                                exploitResutlText.appendText("Default Information is Null");
+                                exploitResutlText.appendText("Default Information is Null\n");
                             } else {
                                 exploitResutlText.appendText("【#INFO#】\n" + result + "\n---------------------------------------------------------------------------------------------------------\n\n");
                             }
                         }
                     } catch (InvocationTargetException e) {
-                        exploitResutlText.appendText("Method 'initInfo' does not exist.未编写初始化信息");
+                        exploitResutlText.appendText("Method 'initInfo' does not exist.未编写初始化信息\n");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    resultTitledPane.setContent(exploitResutlText);
+
                     expTab.setContent(splitPane);
                 } else {
                     SplitPane splitPane = (SplitPane) ComponentUtil.loadComponent(String.valueOf(exploit), "fxml/Exploit/Args_Exploit.fxml", Controller.components);
                     TitledPane argsTilePane = (TitledPane) splitPane.getItems().get(0);
-                    exploitResutlText = new CodeArea();
-                    exploitResutlText.setStyle("-fx-font-size: " + defaultFont.getSize() + "px; -fx-font-family: " + defaultFont.getFamily() + ";");
-                    exploitResutlText.setWrapText(true);
-
+                    TitledPane resultTitledPane = (TitledPane) splitPane.getItems().get(1);
+                    exploitResutlText = (JFXTextArea) resultTitledPane.getContent();
                     try {
                         Method initInfoMethod = exploit.getClass().getMethod("initInfo");
                         if (initInfoMethod != null) {
                             Object result = initInfoMethod.invoke(exploit);
                             if (result == null) {
-                                exploitResutlText.appendText("Default Information is Null");
+                                exploitResutlText.appendText("Default Information is Null\n");
                             } else {
                                 exploitResutlText.appendText("【#INFO#】\n" + result + "\n---------------------------------------------------------------------------------------------------------\n\n");
                             }
                         }
                     } catch (InvocationTargetException e) {
-                        exploitResutlText.appendText("Method 'initInfo' does not exist.未编写初始化信息");
+                        exploitResutlText.appendText("Method 'initInfo' does not exist.未编写初始化信息\n");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    TitledPane resultTitledPane = (TitledPane) splitPane.getItems().get(1);
-                    resultTitledPane.setContent(exploitResutlText);
+
                     CodeArea argsCodeArea = new CodeArea();
                     argsCodeArea.setStyle("-fx-font-size: " + defaultFont.getSize() + "px; -fx-font-family: " + defaultFont.getFamily() + ";");
                     argsCodeArea.setWrapText(true);
@@ -324,14 +319,6 @@ public class HomeController {
         pocTargetAddressTextArea.setParagraphGraphicFactory(LineNumberFactory.get(pocTargetAddressTextArea));
         targetInfoSplitPane.getItems().add(0, pocTargetAddressTextArea);
 
-
-        pocResultText = new CodeArea();
-        pocResultText.setStyle("-fx-font-size: " + defaultFont.getSize() + "px; -fx-font-family: " + defaultFont.getFamily() + ";");
-        pocResultText.setWrapText(true);
-        pocResultText.setId("pocResultText");
-        pocResultSplitPane.getItems().add(1, pocResultText);
-
-
         pocResPluginNameCol.setCellValueFactory(new PropertyValueFactory<>("PluginName"));
         pocResTargetCol.setCellValueFactory(new PropertyValueFactory<>("PocTarget"));
         isvulCol.setCellValueFactory(new PropertyValueFactory<>("PocVul"));
@@ -399,6 +386,11 @@ public class HomeController {
                     targetInfo.setCharset(settingController.getCharset());
                     targetInfo.setDnslog(settingController.getDNSLog());
                     ResultImpl result = new ResultImpl();
+                    result.setPluginName(plugin.getPluginName());
+                    result.setPocTarget(url);
+                    Date date = new Date();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    result.setPocTime(simpleDateFormat.format(date));
                     if (proxyStatus) {
                         String proxyIP = settingController.getProxyIP();
                         String proxyPort = settingController.getProxyPort();
@@ -418,8 +410,6 @@ public class HomeController {
 
 
                     Platform.runLater(() -> {
-                        result.setPluginName(plugin.getPluginName());
-                        result.setPocTarget(url);
                         pocResultTable.getItems().addAll(result);
                         //print poc result
                         pocResultText.appendText("【»»»»】" + plugin.getPluginName() + "\tis Started\n\n");
@@ -448,7 +438,6 @@ public class HomeController {
         executorService.shutdown();
 
     }
-
 
     //runExploit
     @FXML
@@ -525,8 +514,6 @@ public class HomeController {
         }
 
         //result
-        TitledPane resultTilePane = (TitledPane) splitPane.lookup("#resultTitlePane");
-        JFXTextArea exploitResutlText = (JFXTextArea) resultTilePane.lookup("#exploitResutlText");
         exploitResutlText.appendText("【»»»»】" + exploit.setExploitTitle() + "\tis Started\n\n");
         if (!result.getInfo().isEmpty()) {
             exploitResutlText.appendText(String.join("\n", result.getInfo()) + "\n");

@@ -23,8 +23,12 @@ public class ResultImpl implements Result {
     private Boolean pocVul;
 
     private String pocMsg;
+    private String pocTime;
 
 
+    public ResultImpl() {
+
+    }
 
     public List<String> getInfo() {
         return this.info;
@@ -46,6 +50,9 @@ public class ResultImpl implements Result {
         return this.success;
     }
 
+
+
+
     public String getPocTarget() {
         return pocTarget;
     }
@@ -59,8 +66,21 @@ public class ResultImpl implements Result {
     }
 
     public String getPocTime() {
-        return CommonUtils.getDate();
+        return this.pocTime;
     }
+    public String getPluginName(){
+        return this.pluginName;
+    }
+    public void setPluginName(String str){
+        this.pluginName = str;
+    }
+    public void setPocTime(String pocTime){
+        this.pocTime = pocTime;
+    }
+    public void setPocTarget(String target) {
+        this.pocTarget = target;
+    }
+
 
     @Override
     public void printInfo(String str) {
@@ -90,9 +110,7 @@ public class ResultImpl implements Result {
         this.fail.add("【✓】"+str);
     }
 
-    public void setPocTarget(String target) {
-        this.pocTarget = target;
-    }
+
 
     @Override
     public void setPocVul(boolean isvul) {
@@ -110,10 +128,5 @@ public class ResultImpl implements Result {
         return this.pocVul;
     }
 
-    public String getPluginName(){
-        return this.pluginName;
-    }
-    public void setPluginName(String str){
-        this.pluginName = str;
-    }
+
 }

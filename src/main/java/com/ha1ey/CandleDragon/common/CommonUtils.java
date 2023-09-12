@@ -2,20 +2,28 @@ package com.ha1ey.CandleDragon.common;
 
 import com.ha1ey.CandleDragon.core.PluginImpl;
 import com.ha1ey.CandleDragon.core.UtilsPluginImpl;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.stage.Window;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CommonUtils {
 
-    public static List<PluginImpl> pluginList = new LinkedList<>();
+    public static ObservableList<PluginImpl> pluginList = FXCollections.observableArrayList();
     public static List<UtilsPluginImpl> utilsList = new LinkedList<>();
+    public static List<String> pluginFileHashList = new ArrayList<>();
     private static final String CODES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     //判断URL书写规范自动添加http
@@ -107,5 +115,43 @@ public class CommonUtils {
     public static byte[] base64Decode(String input) {
         return Base64.getDecoder().decode(input.getBytes());
     }
+    public static String getMD5(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(input.getBytes());
+            byte[] digest = md.digest();
 
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            // MD5 algorithm is not available
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static String calculateMD5(String filePath) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            DigestInputStream digestInputStream = new DigestInputStream(fileInputStream, md);
+            byte[] buffer = new byte[8192]; // 8 KB buffer
+            int bytesRead;
+            while ((bytesRead = digestInputStream.read(buffer)) != -1) {
+                // Reading the file content while updating the digest
+            }
+            byte[] digest = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException | IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

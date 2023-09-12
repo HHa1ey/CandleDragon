@@ -26,27 +26,30 @@ public class JarLoader {
             List<File> files = findFiles(dir);
             for (File file : files) {
                 if (file.getName().endsWith(".jar")) {
-                    JarFile jarFile = new JarFile(file);
-                    Enumeration<JarEntry> entries = jarFile.entries();
-                    MyURLClassLoader classLoader = new MyURLClassLoader(file.getPath());
-                    while (entries.hasMoreElements()) {
-                        JarEntry jarEntry = entries.nextElement();
-                        String entryName = jarEntry.getName();
-                        if (!entryName.contains("hutool") && entryName.endsWith(".class")) {
-                            String className = entryName.replace("/", ".").substring(0, entryName.length() - 6);
-                            try {
-                                Class<?> clazz = classLoader.loadClass(className);
-                                if (PluginManager.class.isAssignableFrom(clazz)) {
-                                    Method method = clazz.getMethod("registerPlugin", Register.class);
-                                    method.invoke(clazz.newInstance(), new RegistersImpl());
-                                    break;
+                    if (!CommonUtils.pluginFileHashList.contains(CommonUtils.calculateMD5(file.getPath()))){
+                        JarFile jarFile = new JarFile(file);
+                        Enumeration<JarEntry> entries = jarFile.entries();
+                        MyURLClassLoader classLoader = new MyURLClassLoader(file.getPath());
+                        while (entries.hasMoreElements()) {
+                            JarEntry jarEntry = entries.nextElement();
+                            String entryName = jarEntry.getName();
+                            if (!entryName.contains("hutool") && entryName.endsWith(".class")) {
+                                String className = entryName.replace("/", ".").substring(0, entryName.length() - 6);
+                                try {
+                                    Class<?> clazz = classLoader.loadClass(className);
+                                    if (PluginManager.class.isAssignableFrom(clazz)) {
+                                        Method method = clazz.getMethod("registerPlugin", Register.class);
+                                        method.invoke(clazz.newInstance(), new RegistersImpl());
+                                        CommonUtils.pluginFileHashList.add(CommonUtils.calculateMD5(file.getPath()));
+                                        break;
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
                         }
+                        jarFile.close();
                     }
-                    jarFile.close();
                 }
             }
         } catch (Exception e) {

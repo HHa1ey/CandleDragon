@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -8,16 +9,15 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <VBox prefHeight="800.0" prefWidth="1300.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ha1ey.CandleDragon.controller.Controller">
    <HBox fx:id="functionsHBox" prefHeight="784.0" prefWidth="1400.0" VBox.vgrow="ALWAYS">
-      <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="873.0"
-                  prefWidth="33.0">
-         <FontAwesomeIconView glyphName="ROCKET" layoutX="6.0" layoutY="250.0" onMouseClicked="#runHome" size="24" />
-         <FontAwesomeIconView glyphName="WRENCH" layoutX="6.0" layoutY="300.0" onMouseClicked="#runUtils" size="24" />
-         <FontAwesomeIconView glyphName="GEARS" layoutX="6.0" layoutY="350.0" onMouseClicked="#runSetting" size="24" />
-         <FontAwesomeIconView glyphName="BUG" layoutX="6.0" layoutY="400.0" onMouseClicked="#runBug" size="24" />
-         <FontAwesomeIconView glyphName="GITHUB" layoutX="6.0" layoutY="450.0" onMouseClicked="#runGithub" size="24" />
+      <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="873.0" prefWidth="33.0">
+         <FontAwesomeIconView fx:id="vul" glyphName="ROCKET" layoutX="6.0" layoutY="250.0" onMouseClicked="#runHome" size="24" />
+         <FontAwesomeIconView fx:id="utils" glyphName="WRENCH" layoutX="6.0" layoutY="300.0" onMouseClicked="#runUtils" size="24" />
+         <FontAwesomeIconView fx:id="setting" glyphName="GEARS" layoutX="6.0" layoutY="350.0" onMouseClicked="#runSetting" size="24" />
+         <FontAwesomeIconView fx:id="debug" glyphName="BUG" layoutX="6.0" layoutY="400.0" onMouseClicked="#runBug" size="24" />
+         <FontAwesomeIconView fx:id="github" glyphName="GITHUB" layoutX="6.0" layoutY="450.0" onMouseClicked="#runGithub" size="24" />
+         <FontAwesomeIconView fx:id="reload" glyphName="REFRESH" layoutX="6.0" layoutY="200.0" onMouseClicked="#reloadPlugin" size="24" />
       </AnchorPane>
    </HBox>
    <GridPane prefHeight="27.0" prefWidth="1200.0">

@@ -6,7 +6,7 @@
 
     <groupId>com.ha1ey</groupId>
     <artifactId>CandleDragon</artifactId>
-    <version>2.1.1</version>
+    <version>2.1.2</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.fxmisc.richtext</groupId>
             <artifactId>richtextfx</artifactId>
-            <version>0.10.7</version>
+            <version>0.10.8</version>
         </dependency>
 
         <dependency>

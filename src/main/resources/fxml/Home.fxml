@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
@@ -22,12 +23,12 @@
    <JFXTabPane fx:id="pocexpTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="873.0" prefWidth="998.0" HBox.hgrow="ALWAYS">
       <Tab closable="false" text="Poc">
          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-            <JFXButton onAction="#startPoc" prefHeight="25.0" prefWidth="932.0" text="Scan" />
-            <SplitPane dividerPositions="0.2527352297592998" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <JFXButton onAction="#startPoc" prefHeight="25.0" prefWidth="932.0" text="Scan" VBox.vgrow="ALWAYS" />
+            <SplitPane dividerPositions="0.2527352297592998" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                <SplitPane fx:id="targetInfoSplitPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL">
                   <JFXListView fx:id="scanPocList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#monitorPocPlugin" prefHeight="608.0" prefWidth="357.0" />
                </SplitPane>
-               <SplitPane fx:id="pocResultSplitPane" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+               <SplitPane fx:id="pocResultSplitPane" dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                   <TableView fx:id="pocResultTable" prefHeight="200.0" prefWidth="200.0">
                      <columns>
                         <TableColumn fx:id="pocResPluginNameCol" prefWidth="124.28570556640625" text="Plugin Name" />
@@ -37,18 +38,19 @@
                         <TableColumn fx:id="pocTimeCol" prefWidth="219.428466796875" text="Time" />
                      </columns>
                   </TableView>
+                  <JFXTextArea fx:id="pocResultText" />
                </SplitPane>
             </SplitPane>
          </VBox>
       </Tab>
       <Tab closable="false" text="Exploit">
          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-            <AnchorPane maxWidth="1.7976931348623157E308" prefHeight="77.0" prefWidth="916.0">
+            <AnchorPane maxWidth="1.7976931348623157E308" prefHeight="77.0" prefWidth="916.0" VBox.vgrow="ALWAYS">
                <Label layoutX="122.0" layoutY="32.0" text="Target Address:" />
                <JFXTextField fx:id="exploitTargetAddressText" layoutX="230.0" layoutY="28.0" prefHeight="25.0" prefWidth="415.0" />
                <JFXButton layoutX="668.0" layoutY="24.0" onAction="#startExploit" prefHeight="34.0" prefWidth="92.0" text="Exploit" />
             </AnchorPane>
-            <JFXTabPane fx:id="exploitTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" tabClosingPolicy="ALL_TABS" />
+            <JFXTabPane fx:id="exploitTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" tabClosingPolicy="ALL_TABS" VBox.vgrow="ALWAYS" />
          </VBox>
       </Tab>
    </JFXTabPane>

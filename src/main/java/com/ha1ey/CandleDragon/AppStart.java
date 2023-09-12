@@ -15,7 +15,7 @@ public class AppStart extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/Control.fxml")));
         primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getClassLoader().getResource("icon/icon.png")).toString()));
-        primaryStage.setTitle("CandleDragon Vulnerability Exploitation Tools     V 2.1.1      Author：Ha1ey");
+        primaryStage.setTitle("CandleDragon Vulnerability Exploitation Tools     V 2.1.2      Author：Ha1ey");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

@@ -2,17 +2,18 @@ package com.ha1ey.CandleDragon.controller;
 
 import com.ha1ey.CandleDragon.common.CommonUtils;
 import com.ha1ey.CandleDragon.common.ComponentUtil;
+import com.ha1ey.CandleDragon.common.JarLoader;
 import com.ha1ey.CandleDragon.core.UtilsPluginImpl;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextArea;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TitledPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import java.awt.*;
@@ -25,7 +26,18 @@ public class Controller {
     private HBox functionsHBox;
     @FXML
     private Label proxyStatusLabel;
-
+    @FXML
+    private FontAwesomeIconView utils;
+    @FXML
+    private FontAwesomeIconView setting;
+    @FXML
+    private FontAwesomeIconView debug;
+    @FXML
+    private FontAwesomeIconView github;
+    @FXML
+    private FontAwesomeIconView reload;
+    @FXML
+    private FontAwesomeIconView vul;
 
     public static HashMap<String, Parent> components = new HashMap<>();
     public static HashMap<String, Object> controllers = new HashMap<>();
@@ -38,9 +50,70 @@ public class Controller {
         ComponentUtil.addComponent("debug", "fxml/DeBug.fxml", components, controllers);
         controllers.put("control", this);
         proxyStatusLabel.setText("ProxyStatus: \tClose");
+
+        initTips();
         runHome();
     }
 
+    private void initTips(){
+        Tooltip reloadtip = new Tooltip("reload plugins");
+        reload.setOnMouseEntered(event -> {
+            reloadtip.show(reload, event.getScreenX() + 10, event.getScreenY() + 10);
+        });
+
+        reload.setOnMouseExited(event -> {
+            reloadtip.hide();
+        });
+
+
+        Tooltip vultip = new Tooltip("Vul module");
+        vul.setOnMouseEntered(event -> {
+            vultip.show(vul, event.getScreenX() + 10, event.getScreenY() + 10);
+        });
+
+        vul.setOnMouseExited(event -> {
+            vultip.hide();
+        });
+
+
+        Tooltip utilstip = new Tooltip("Utils module");
+        utils.setOnMouseEntered(event -> {
+            utilstip.show(utils, event.getScreenX() + 10, event.getScreenY() + 10);
+        });
+
+        utils.setOnMouseExited(event -> {
+            utilstip.hide();
+        });
+
+
+        Tooltip settingtip = new Tooltip("setting module");
+        setting.setOnMouseEntered(event -> {
+            settingtip.show(setting, event.getScreenX() + 10, event.getScreenY() + 10);
+        });
+
+        setting.setOnMouseExited(event -> {
+            settingtip.hide();
+        });
+
+
+        Tooltip debugtip = new Tooltip("debug module");
+        debug.setOnMouseEntered(event -> {
+            debugtip.show(debug, event.getScreenX() + 10, event.getScreenY() + 10);
+        });
+
+        debug.setOnMouseExited(event -> {
+            debugtip.hide();
+        });
+
+        Tooltip githubtip = new Tooltip("github module");
+        github.setOnMouseEntered(event -> {
+            githubtip.show(github, event.getScreenX() + 10, event.getScreenY() + 10);
+        });
+
+        github.setOnMouseExited(event -> {
+            githubtip.hide();
+        });
+    }
 
     public void setProxyStatusLabel(String proxyIP, String proxyPort, String proxyType, Boolean isProxy) {
         if (isProxy && !proxyIP.isEmpty() && !proxyPort.isEmpty()) {
@@ -119,6 +192,12 @@ public class Controller {
         }
         functionsHBox.getChildren().add(1, debugTabPane);
         functionsHBox.setHgrow(debugTabPane, Priority.ALWAYS);
+    }
+
+    @FXML
+    private void reloadPlugin(){
+        HomeController homeController = (HomeController) controllers.get("home");
+        homeController.initPlugin();
     }
 
 
