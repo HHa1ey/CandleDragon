@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.fxmisc.richtext</groupId>
             <artifactId>richtextfx</artifactId>
-            <version>0.10.8</version>
+            <version>0.10.7</version>
         </dependency>
 
         <dependency>
