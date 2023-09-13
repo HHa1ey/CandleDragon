@@ -84,6 +84,8 @@
                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                   <Label layoutX="24.0" layoutY="22.0" text="Timeout:" />
                   <JFXTextField fx:id="timeoutText" layoutX="86.0" layoutY="18.0" prefHeight="25.0" prefWidth="95.0" text="1000" />
+                  <Text layoutX="228.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CustomCookie:" />
+                  <JFXTextField fx:id="customCookieText" layoutX="321.0" layoutY="17.0" prefHeight="25.0" prefWidth="330.0" />
                </AnchorPane>
                <TitledPane fx:id="uaTitlePane" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="UserAgent" />
             </items>

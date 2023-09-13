@@ -71,6 +71,8 @@ public class SettingController {
     @FXML
     private JFXComboBox<String> dnslogComboxBox;
 
+    @FXML
+    private JFXTextField customCookieText;
 
     private final List<String> ualist = new ArrayList<>();
     private long lastTimestamp = 0;
@@ -375,6 +377,10 @@ public class SettingController {
 
     public Boolean getProxyStatus() {
         return isProxy;
+    }
+
+    public String getCustomCookie(){
+        return customCookieText.getText();
     }
 
 

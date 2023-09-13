@@ -385,6 +385,7 @@ public class HomeController {
                     targetInfo.setTimeout(settingController.getTimeout());
                     targetInfo.setCharset(settingController.getCharset());
                     targetInfo.setDnslog(settingController.getDNSLog());
+                    targetInfo.setCookie(settingController.getCustomCookie());
                     ResultImpl result = new ResultImpl();
                     result.setPluginName(plugin.getPluginName());
                     result.setPocTarget(url);

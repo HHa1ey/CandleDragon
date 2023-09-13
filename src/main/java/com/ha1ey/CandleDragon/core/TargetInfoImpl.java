@@ -8,6 +8,7 @@ public class TargetInfoImpl implements TargetInfo {
     private int timeout;
     private String charset;
     private String dnslog;
+    private String cookie;
 
     public void setDnslog(String dnslog){
         this.dnslog = dnslog;
@@ -27,6 +28,9 @@ public class TargetInfoImpl implements TargetInfo {
         this.charset = charset;
     }
 
+    public void setCookie(String cookie){
+        this.cookie = cookie;
+    }
     @Override
     public String getAddress() {
         return this.address;
@@ -50,5 +54,10 @@ public class TargetInfoImpl implements TargetInfo {
     @Override
     public String getDNSLog() {
         return this.dnslog;
+    }
+
+    @Override
+    public String getCookie() {
+        return this.cookie;
     }
 }
