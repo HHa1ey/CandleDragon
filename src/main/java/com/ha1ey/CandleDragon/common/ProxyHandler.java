@@ -3,7 +3,6 @@ package com.ha1ey.CandleDragon.common;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
