@@ -2,7 +2,6 @@ package com.ha1ey.CandleDragon.controller;
 
 import com.ha1ey.CandleDragon.common.CommonUtils;
 import com.ha1ey.CandleDragon.common.ComponentUtil;
-import com.ha1ey.CandleDragon.common.JarLoader;
 import com.ha1ey.CandleDragon.core.UtilsPluginImpl;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextArea;
@@ -11,10 +10,10 @@ import javafx.fxml.FXML;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 import java.awt.*;
 import java.net.URI;
@@ -198,6 +197,7 @@ public class Controller {
     private void reloadPlugin(){
         HomeController homeController = (HomeController) controllers.get("home");
         homeController.initPlugin();
+
     }
 
 

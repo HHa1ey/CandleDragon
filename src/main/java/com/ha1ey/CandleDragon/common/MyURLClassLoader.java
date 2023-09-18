@@ -33,7 +33,4 @@ public class MyURLClassLoader extends ClassLoader{
         }
         return clazz;
     }
-
-
-
 }
